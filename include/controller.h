@@ -12,11 +12,20 @@ class Controller {
     View *view = nullptr;
     GLFWwindow* mainWindow = nullptr;
 
-    Controller();
-    ~Controller();
+    Controller()
+    {
+      this->view = new View();
+      this->mainWindow = this->view->initialize_window();
+    };
+    ~Controller()
+    {
+      delete this->view;
+    };
     void mainLoop();
+
+  private:
+    void processInput(GLFWwindow* window);
 };
 
-void processInput(GLFWwindow* window);
-#endif
 
+#endif
