@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "../include/view.h"
+#include "../include/shader.h"
 #include "../include/model.h"
 
 

@@ -12,45 +12,7 @@ void Controller::mainLoop( void )
      0.0f,  0.5f, 0.0f
   };  
   
-  const char *vertexShaderSource = "#version 330 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "}\0";
-  unsigned int vertexShader;
-  vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-  glCompileShader(vertexShader);
-
-  const char * fragmentShaderSource = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-    "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-"}\0";
-
-  unsigned int fragmentShader;
-  fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-  glCompileShader(fragmentShader);
-
-
-
-  unsigned int shaderProgram;
-  shaderProgram = glCreateProgram();
-  glAttachShader(shaderProgram, vertexShader);
-  glAttachShader(shaderProgram, fragmentShader);
-  glLinkProgram(shaderProgram);   
-
-
-  glUseProgram(shaderProgram);
-
-  glDeleteShader(vertexShader);
-  glDeleteShader(fragmentShader);
-
-
-
+  Shader shader("source/shaders/shader.vs", "source/shaders/shader.fs");
 
    unsigned int indices[] = {  
         0, 1, 3,  
@@ -79,10 +41,23 @@ void Controller::mainLoop( void )
   while(!glfwWindowShouldClose(window))
   {
     processInput(window);
+    float random = rand() % 3;
 
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    float red = 0.0f;
+    float green = 0.0f;
+    float blue = 0.0f;
+    if(random == 0)
+      red = 1.0f;
+    else if(random == 1)
+      green = 1.0f;
+    else 
+      blue = 1.0f;
+
+    shader.use();
+    glClearColor(green,red,green, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    glUseProgram(shaderProgram);
+
+    shader.setFloat("vertexColor", red,green,blue, 1.0f);
     glBindVertexArray(VAO); 
     glDrawArrays(GL_TRIANGLES, 0, 3);
     glfwSwapBuffers(window);
