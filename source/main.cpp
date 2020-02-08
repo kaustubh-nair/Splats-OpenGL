@@ -76,10 +76,19 @@ int main()
     // draw in wireframe
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    //transformation
+    glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+    glm::mat4 trans = glm::mat4(1.0f);
+
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
     {
+      float random = rand() % 10;
+ 
+ 
+      trans = glm::rotate(trans, glm::radians(random), glm::vec3(0.0f, 0.0f, -1.0f));
+
         // per-frame time logic
         // --------------------
         float currentFrame = glfwGetTime();
@@ -103,6 +112,7 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
+        ourShader.setMat4("transform", trans);
 
         // render the loaded model
         glm::mat4 model = glm::mat4(1.0f);
