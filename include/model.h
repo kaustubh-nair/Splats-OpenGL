@@ -8,6 +8,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+
 #include "../include/shader.h"
 
 struct Vertex {
@@ -19,7 +20,10 @@ struct Vertex {
 struct Texture {
   unsigned int id;
   std::string type;
+  std::string path;
 };
+
+unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
 
 class Mesh {
   public: 

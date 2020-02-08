@@ -1,6 +1,5 @@
 #include "../include/view.h"
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 View::View()
 {
@@ -32,11 +31,7 @@ GLFWwindow* View::initialize_window()
 
 
   glViewport(0, 0, 800, 600);
-  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+  //glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
   return window;
 }
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-}

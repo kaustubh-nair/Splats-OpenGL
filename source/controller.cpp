@@ -40,28 +40,6 @@ void Controller::mainLoop( void )
 
   while(!glfwWindowShouldClose(window))
   {
-    processInput(window);
-    float random = rand() % 3;
-
-    float red = 0.0f;
-    float green = 0.0f;
-    float blue = 0.0f;
-    if(random == 0)
-      red = 1.0f;
-    else if(random == 1)
-      green = 1.0f;
-    else 
-      blue = 1.0f;
-
-    shader.use();
-    glClearColor(green,red,green, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    shader.setFloat("vertexColor", red,green,blue, 1.0f);
-    glBindVertexArray(VAO); 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    glfwSwapBuffers(window);
-    glfwPollEvents();
   }
 
   glfwTerminate();
