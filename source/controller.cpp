@@ -38,9 +38,8 @@ void Controller::mainLoop( void )
 
     glBindVertexArray(0);
 
-    glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-    glm::mat4 trans = glm::mat4(1.0f);
 
+    glm::mat4 trans = glm::mat4(1.0f);
 
   while(!glfwWindowShouldClose(window))
   {
@@ -60,9 +59,13 @@ void Controller::mainLoop( void )
     shader.use();
     glClearColor(green,red,green, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+    random = rand() % 50;
 
     shader.setFloat("vertexColor", red,green,blue, 1.0f);
-    trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(red, green, blue));
+    trans = glm::rotate(trans, glm::radians(random), glm::vec3(red, green, blue));
+    //glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+    //glm::mat4 trans = glm::mat4(1.0f);
+    //trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f,0.0f,0.1f));
     shader.setMat4("transform", trans);
     glBindVertexArray(VAO); 
     glDrawArrays(GL_TRIANGLES, 0, 3);
