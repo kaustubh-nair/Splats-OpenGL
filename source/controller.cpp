@@ -19,16 +19,16 @@ void Controller::mainLoop( void )
 
   glewExperimental = GL_TRUE;
   glewInit();
-  float vertices[] = {
-  };  
+  std::string PLY_FILEPATH = "data/big_spider.ply";
+  float *vertices;
+  PlyParser::get_vertices(vertices, PLY_FILEPATH);
   int size = (sizeof(vertices)/sizeof(*vertices));
 
   normalize(vertices, size);
   
   Shader shader("source/shaders/shader.vs", "source/shaders/shader.fs");
 
-   unsigned int indices[] = {
-    };
+   unsigned int indices[] = {};
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
