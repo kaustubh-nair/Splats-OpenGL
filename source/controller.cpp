@@ -1,5 +1,18 @@
 #include "../include/controller.h"
+#include<cmath>
 
+void normalize(float vertices[], int size)
+{
+  for(int i = 0; i < size; i+=3)
+  {
+    //x^2 + y^2 + z^2
+    float v = pow(vertices[i],2) + pow(vertices[i+1],2) + pow(vertices[i+2],2);
+    v = sqrt(v);
+    vertices[i] = vertices[i]/v;
+    vertices[i+1] = vertices[i+1]/v;
+    vertices[i+2] = vertices[i+2]/v;
+  }
+}
 void Controller::mainLoop( void )
 {
   GLFWwindow* window = this->mainWindow;
@@ -7,16 +20,14 @@ void Controller::mainLoop( void )
   glewExperimental = GL_TRUE;
   glewInit();
   float vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-     0.5f, -0.5f, 0.0f,
-     0.0f,  0.5f, 0.0f
   };  
+  int size = (sizeof(vertices)/sizeof(*vertices));
+
+  normalize(vertices, size);
   
   Shader shader("source/shaders/shader.vs", "source/shaders/shader.fs");
 
-   unsigned int indices[] = {  
-        0, 1, 3,  
-        1, 2, 3   
+   unsigned int indices[] = {
     };
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -39,36 +50,33 @@ void Controller::mainLoop( void )
     glBindVertexArray(0);
 
 
-    glm::mat4 trans = glm::mat4(1.0f);
 
+    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    float angle = 0.0f;
   while(!glfwWindowShouldClose(window))
   {
     processInput(window);
-    float random = rand() % 3;
-
-    float red = 0.5f;
-    float green = 0.5f;
-    float blue = 0.5f;
-    if(random == 0)
-      red = 1.0f;
-    else if(random == 1)
-      green = 1.0f;
-    else 
-      blue = 1.0f;
 
     shader.use();
-    glClearColor(green,red,green, 1.0f);
+    glClearColor(0.0f,0.0f,0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    random = rand() % 50;
 
-    shader.setFloat("vertexColor", red,green,blue, 1.0f);
-    trans = glm::rotate(trans, glm::radians(random), glm::vec3(red, green, blue));
+    shader.setFloat("vertexColor", 0.5f,0.0f,0.0f, 1.0f);
+    glm::mat4 trans = glm::mat4(1.0f);
+    angle = (angle + (float)1) ;
+    trans = glm::rotate(trans, glm::radians(angle), glm::vec3(0.5f, 0.5f, 0.5f));
     //glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
     //glm::mat4 trans = glm::mat4(1.0f);
     //trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f,0.0f,0.1f));
     shader.setMat4("transform", trans);
+    glm::mat4 view = glm::mat4(1.0f);
+    view = glm::translate( view, glm::vec3(0.0f, 0.0f, -0.5f));
+    shader.setMat4("view", view);
     glBindVertexArray(VAO); 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    //glDrawArrays(GL_TRIANGLES, 0, 5);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    int length = (sizeof(indices)/sizeof(*indices));
+    glDrawElements(GL_TRIANGLES,length, GL_UNSIGNED_INT, 0);
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
