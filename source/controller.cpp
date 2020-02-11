@@ -8,6 +8,7 @@ void normalize(float vertices[], int size)
     //x^2 + y^2 + z^2
     float v = pow(vertices[i],2) + pow(vertices[i+1],2) + pow(vertices[i+2],2);
     v = sqrt(v);
+    print(vertices[i]);
     vertices[i] = vertices[i]/v;
     vertices[i+1] = vertices[i+1]/v;
     vertices[i+2] = vertices[i+2]/v;
@@ -19,9 +20,8 @@ void Controller::mainLoop( void )
 
   glewExperimental = GL_TRUE;
   glewInit();
-  std::string PLY_FILEPATH = "data/big_spider.ply";
-  float *vertices;
-  PlyParser::get_vertices(vertices, PLY_FILEPATH);
+  PlyParser ply_parser("data/big_spider.ply");
+  float *vertices = ply_parser.vertices;
   int size = (sizeof(vertices)/sizeof(*vertices));
 
   normalize(vertices, size);
