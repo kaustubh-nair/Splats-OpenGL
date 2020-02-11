@@ -1,19 +1,6 @@
 #include "../include/controller.h"
 #include<cmath>
 
-void normalize(float vertices[], int size)
-{
-  for(int i = 0; i < size; i+=3)
-  {
-    //x^2 + y^2 + z^2
-    float v = pow(vertices[i],2) + pow(vertices[i+1],2) + pow(vertices[i+2],2);
-    v = sqrt(v);
-    vertices[i] = vertices[i]/v;
-    vertices[i+1] = vertices[i+1]/v;
-    vertices[i+2] = vertices[i+2]/v;
-  }
-}
-
 void Controller::mainLoop( void )
 {
   GLFWwindow* window = this->mainWindow;
