@@ -1,6 +1,10 @@
 #ifndef PLY_PARSER_H
 #define PLY_PARSER_H
 
+//careful: no multiple declarations for glm allowed
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -8,29 +12,22 @@
 #include <vector>
 
 #include "../include/definitions.h"
+#include "../include/vertex.h"
 
 class PlyParser
 {
   public:
-    std::string filepath;
-    float *vertices;
-    float *indices;
-
-
-    // save vertices and indices
-    PlyParser(std::string filepath)
+    // store vertices and indices
+    static void parse(std::string filepath, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices)
     {
-      this->filepath = filepath;
-
       std::ifstream ply_file;
       ply_file.open(filepath, std::ios::in);
       std::string line;
-      int i,j;
+      int i,j,num_vertices,num_faces;
+      float x,y,z;
       if(ply_file.is_open())
       {
         std::string head_position = "header";
-        int num_vertices = 0;
-        int num_faces = 0;
         std::vector<std::string> split_line;
 
         while (getline(ply_file, line))
@@ -38,7 +35,7 @@ class PlyParser
           split(line, split_line, ' ');
           if(!head_position.compare("header"))
           {
-            if(!split_line[0].compare("end_header\r"))
+            if(split_line[0].compare("end_header\r") == 0 || split_line[0].compare("end_header") == 0)
               head_position = "vertices";
             else if(!split_line[0].compare("element"))
             {
@@ -47,13 +44,11 @@ class PlyParser
               {
                 num_vertices = std::stoi(split_line[2]);
                 i = num_vertices;
-                vertices = new float [3 * num_vertices];  //3 - number of components of vertex
               }
               else if(!split_line[1].compare("face"))
               {
                 num_faces = std::stoi(split_line[2]);
                 j = num_faces;
-                indices = new float [3 * num_faces];  // 3 - triangular faces
               }
             }
           }
@@ -63,9 +58,12 @@ class PlyParser
               head_position = "indices";
 
             split(line, split_line, ' ');
-            vertices[(3*num_vertices) - (3*i)] = std::atof(split_line[0].c_str()); // x
-            vertices[(3*num_vertices) - ((3*i) + 1)] = std::atof(split_line[1].c_str()); // y
-            vertices[(3*num_vertices) - ((3*i) + 2)] = std::atof(split_line[2].c_str()); // z
+            x = std::atof(split_line[0].c_str()); // x
+            y = std::atof(split_line[1].c_str()); // y
+            z = std::atof(split_line[2].c_str()); // z
+
+            Vertex vertex = {glm::vec3(x,y,z)};
+            vertices.push_back(vertex);
             i--;
           }
           else if(!head_position.compare("indices"))
@@ -79,9 +77,10 @@ class PlyParser
               print("Face not triangular");
               continue;
             }
-            indices[(3*num_faces) - (3*i)] = std::stoi(split_line[1].c_str()); // x
-            indices[(3*num_faces) - ((3*i) + 1)] = std::stoi(split_line[2].c_str()); // y
-            indices[(3*num_faces) - ((3*i) + 2)] = std::stoi(split_line[3].c_str()); // z
+            indices.push_back(std::stoi(split_line[1].c_str()));
+            indices.push_back(std::stoi(split_line[2].c_str()));
+            indices.push_back(std::stoi(split_line[3].c_str()));
+
             j--;
           }
           else
@@ -95,17 +94,12 @@ class PlyParser
       {
         print("Could not open file " + filepath);
       }
-
-      print(indices[0]);
-      print(indices[10]);
-      print(indices[100]);
-      print(indices[4000]);
-
     }
+
   private:
     // split string by spaces
     // https://stackoverflow.com/a/5888676
-    size_t split(const std::string &txt, std::vector<std::string> &strs, char ch)
+    static size_t split(const std::string &txt, std::vector<std::string> &strs, char ch)
     {
         size_t pos = txt.find( ch );
         size_t initialPos = 0;
