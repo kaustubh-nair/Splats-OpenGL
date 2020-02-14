@@ -77,9 +77,27 @@ class PlyParser
               print("Face not triangular");
               continue;
             }
-            indices.push_back(std::stoi(split_line[1].c_str()));
-            indices.push_back(std::stoi(split_line[2].c_str()));
-            indices.push_back(std::stoi(split_line[3].c_str()));
+            int v1 = std::stoi(split_line[1].c_str());
+            int v2 = std::stoi(split_line[2].c_str());
+            int v3 = std::stoi(split_line[3].c_str());
+
+            Vertex a = vertices.at(v1);
+            Vertex b = vertices.at(v2);
+            Vertex c = vertices.at(v3);
+
+            glm::vec3 normal = glm::normalize( glm::cross(b.position - a.position, c.position - a.position) );
+
+            a.face_normals.push_back(normal);
+            b.face_normals.push_back(normal);
+            c.face_normals.push_back(normal);
+
+            vertices.at(v1) = a;
+            vertices.at(v2) = b;
+            vertices.at(v3) = c;
+
+            indices.push_back(v1);
+            indices.push_back(v2);
+            indices.push_back(v3);
 
             j--;
           }
@@ -94,8 +112,25 @@ class PlyParser
       {
         print("Could not open file " + filepath);
       }
+      compute_vertex_normals(vertices);
     }
 
+
+    static void compute_vertex_normals(std::vector<Vertex> &vertices)
+    {
+      std::vector<Vertex>::iterator vertex;
+      std::vector<glm::vec3>::iterator normal;
+
+      for(vertex = vertices.begin(); vertex < vertices.end(); vertex++)
+      {
+        glm::vec3 vec_normal = glm::vec3(0.0, 0.0, 0.0);
+
+        for(normal = vertex->face_normals.begin(); normal < vertex->face_normals.end(); normal++)
+          vec_normal = vec_normal + *normal;
+
+        vertex->normal = glm::normalize(vec_normal);
+      }
+    }
   private:
     // split string by spaces
     // https://stackoverflow.com/a/5888676

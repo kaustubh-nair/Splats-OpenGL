@@ -21,14 +21,16 @@ class Controller {
       this->view = new View();
       this->mainWindow = this->view->initialize_window();
     };
+
     ~Controller()
     {
       delete this->view;
     };
+
     void mainLoop();
 
   private:
-    void processInput(GLFWwindow* window);
+    glm::mat4 processInput(GLFWwindow* window);
 };
 
 

@@ -26,8 +26,14 @@ void Mesh::setup()
   glBindVertexArray(0);
 }
 
-void Mesh::draw()
+void Mesh::draw(float angle, Shader shader)
 {
+  glm::mat4 model = glm::translate(glm::mat4(1.0f), location);
+  model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0,1.0,0.0));
+  shader.setFloat("vertexColor", 0.0f,0.5f,0.5f, 1.0f);
+  shader.setMat4("model", model);
+  //shader.setVec3("lightPos", lightPos);
+
   glBindVertexArray(VAO); 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
   glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
