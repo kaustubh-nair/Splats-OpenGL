@@ -1,5 +1,9 @@
 #include "../include/model.h"
 
+void Model::draw_lighting( Shader shader)
+{
+  meshes[0].draw_lighting(shader);
+}
 void Model::setup(std::vector<std::string> filepaths, std::vector<glm::vec3> locations)
 {
   std::vector<std::string>::iterator filepath;

@@ -19,9 +19,11 @@ class Mesh {
     Mesh(std::string filepath);
     void setup();
     void draw(float angle, Shader shader);
+    void draw_lighting( Shader shader);
+    void setupLighting();
 
   private:
-    unsigned int VAO, VBO, EBO;
+    unsigned int VAO, VBO, EBO, lightVAO, lightVBO;
 
 };
 
