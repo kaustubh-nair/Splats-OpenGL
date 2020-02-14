@@ -1,20 +1,21 @@
 #include "../include/model.h"
 
 
-void Model::setup(std::vector<std::string> filepaths, std::vector<glm::vec3> locations)
+void Model::setup(std::vector<std::string> filepaths, std::vector<glm::vec3> meshPos)
 {
   std::vector<std::string>::iterator filepath;
-  std::vector<glm::vec3>::iterator location = locations.begin();
+  std::vector<glm::vec3>::iterator position = meshPos.begin();
 
   for (filepath = filepaths.begin(); filepath < filepaths.end(); filepath++)
   {
     Mesh mesh(*filepath);
-    mesh.location = *location;
+    mesh.position = *position;
     mesh.setup();
     meshes.push_back(mesh);
 
-    location++;
+    position++;
   }
+
 }
 
 void Model::draw(float angle, Shader shader, Shader lightingShader)
@@ -25,5 +26,6 @@ void Model::draw(float angle, Shader shader, Shader lightingShader)
   {
     (*mesh).draw(angle,shader);
   }
+  Lighting lighting;
+  lighting.draw(lightingShader);
 }
-

@@ -1,22 +1,18 @@
-#ifndef MESH_H
-#define MESH_H
+#ifndef LIGHTING_H
+#define LIGHTING_H
 
 #include <GL/glew.h>
 #include <string>
 #include <vector>
 
-#include "../include/vertex.h"
 #include "../include/shader.h"
 
 
 class Lighting {
   public:
-    std::vector<Vertex> vertices;
-    std::vector<unsigned int> indices;
-    glm::vec3 location;
-    Mesh(std::string filepath);
-    static void setup();
-    static void draw(float angle, Shader shader);
+    glm::vec3 position;
+    void setup();
+    void draw(Shader shader);
   private:
     unsigned int VAO, VBO;
 

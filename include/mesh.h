@@ -14,7 +14,7 @@ class Mesh {
   public:
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
-    glm::vec3 location;
+    glm::vec3 position;
 
     Mesh(std::string filepath);
     void setup();
