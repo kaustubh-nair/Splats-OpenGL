@@ -1,9 +1,6 @@
 #include "../include/model.h"
 
-void Model::draw_lighting( Shader shader)
-{
-  meshes[0].draw_lighting(shader);
-}
+
 void Model::setup(std::vector<std::string> filepaths, std::vector<glm::vec3> locations)
 {
   std::vector<std::string>::iterator filepath;
@@ -20,7 +17,7 @@ void Model::setup(std::vector<std::string> filepaths, std::vector<glm::vec3> loc
   }
 }
 
-void Model::draw(float angle, Shader shader)
+void Model::draw(float angle, Shader shader, Shader lightingShader)
 {
   std::vector<Mesh>::iterator mesh;
 

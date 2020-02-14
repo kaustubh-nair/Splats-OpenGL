@@ -9,7 +9,7 @@ class Model
 {
   public:
     void draw_lighting( Shader shader);
-    void draw(float angle, Shader shader);
+    void draw(float angle, Shader shader, Shader lightingShader);
     void setup(std::vector<std::string> filepaths, std::vector<glm::vec3> locations);
   private:
     std::vector<Mesh> meshes;
