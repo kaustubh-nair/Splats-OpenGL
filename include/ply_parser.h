@@ -17,8 +17,12 @@
 class PlyParser
 {
   public:
+    std::vector<glm::vec3> faceNormals;
+    std::vector<glm::vec3> inCenters;
+    std::vector<float> inRadii;
+
     // store vertices and indices
-    static void parse(std::string filepath, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices)
+    void parse(std::string filepath, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices)
     {
       std::ifstream ply_file;
       ply_file.open(filepath, std::ios::in);
@@ -87,6 +91,8 @@ class PlyParser
 
             glm::vec3 normal = glm::normalize( glm::cross(b.position - a.position, c.position - a.position) );
 
+            faceNormals.push_back(normal);
+
             a.face_normals.push_back(normal);
             b.face_normals.push_back(normal);
             c.face_normals.push_back(normal);
@@ -118,7 +124,7 @@ class PlyParser
     }
 
 
-    static void compute_vertex_normals(std::vector<Vertex> &vertices)
+    void compute_vertex_normals(std::vector<Vertex> &vertices)
     {
       std::vector<Vertex>::iterator vertex;
       std::vector<glm::vec3>::iterator normal;
@@ -134,7 +140,7 @@ class PlyParser
       }
     }
 
-    static void compute_incircle(Vertex a, Vertex b, Vertex c)
+    void compute_incircle(Vertex a, Vertex b, Vertex c)
     {
       float area = 0.5 * glm::length( glm::cross(a.position - c.position, b.position - c.position) );
 
@@ -157,7 +163,7 @@ class PlyParser
   private:
     // split string by spaces
     // https://stackoverflow.com/a/5888676
-    static size_t split(const std::string &txt, std::vector<std::string> &strs, char ch)
+    size_t split(const std::string &txt, std::vector<std::string> &strs, char ch)
     {
         size_t pos = txt.find( ch );
         size_t initialPos = 0;
