@@ -13,13 +13,12 @@
 
 #include "../include/definitions.h"
 #include "../include/vertex.h"
+#include "../include/in_circle.h"
 
 class PlyParser
 {
   public:
-    std::vector<glm::vec3> faceNormals;
-    std::vector<glm::vec3> inCenters;
-    std::vector<float> inRadii;
+    std::vector<InCircle> inCircles;
 
     // store vertices and indices
     void parse(std::string filepath, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices)
@@ -29,6 +28,8 @@ class PlyParser
       std::string line;
       int i,j,num_vertices,num_faces;
       float x,y,z;
+      float max = -10000000.0;
+      float min = 1000000000.0;
       if(ply_file.is_open())
       {
         std::string head_position = "header";
@@ -66,6 +67,9 @@ class PlyParser
             y = std::atof(split_line[1].c_str()); // y
             z = std::atof(split_line[2].c_str()); // z
 
+            min = std::min(min, std::min(x, std::min(y, z)));
+            max = std::max(max, std::max(x, std::max(y, z)));
+
             Vertex vertex = {glm::vec3(x,y,z)};
             vertices.push_back(vertex);
             i--;
@@ -81,6 +85,7 @@ class PlyParser
               print("Face not triangular");
               continue;
             }
+            /* store indices */
             int v1 = std::stoi(split_line[1].c_str());
             int v2 = std::stoi(split_line[2].c_str());
             int v3 = std::stoi(split_line[3].c_str());
@@ -91,7 +96,6 @@ class PlyParser
 
             glm::vec3 normal = glm::normalize( glm::cross(b.position - a.position, c.position - a.position) );
 
-            faceNormals.push_back(normal);
 
             a.face_normals.push_back(normal);
             b.face_normals.push_back(normal);
@@ -105,7 +109,7 @@ class PlyParser
             indices.push_back(v2);
             indices.push_back(v3);
 
-            compute_incircle(a,b,c);
+            compute_incircle(normal,a,b,c);
 
             j--;
           }
@@ -120,9 +124,28 @@ class PlyParser
       {
         print("Could not open file " + filepath);
       }
+      normalize_vertices(vertices, min, max);
       compute_vertex_normals(vertices);
     }
 
+    void normalize_vertices(std::vector<Vertex> &vertices, float min, float max)
+    {
+      std::vector<Vertex>::iterator vertex;
+      float x,y,z,d;
+
+      for(vertex = vertices.begin(); vertex < vertices.end(); vertex++)
+      {
+        d = max-min;
+        x = vertex->position.x;
+        y = vertex->position.y;
+        z = vertex->position.z;
+
+        x = (x-min)/d;
+        y = (y-min)/d;
+        z = (z-min)/d;
+        vertex->position = glm::vec3(x,y,z);
+      }
+    }
 
     void compute_vertex_normals(std::vector<Vertex> &vertices)
     {
@@ -140,7 +163,8 @@ class PlyParser
       }
     }
 
-    void compute_incircle(Vertex a, Vertex b, Vertex c)
+
+    void compute_incircle(glm::vec3 normal, Vertex a, Vertex b, Vertex c)
     {
       float area = 0.5 * glm::length( glm::cross(a.position - c.position, b.position - c.position) );
 
@@ -157,9 +181,15 @@ class PlyParser
 
       float semiPerimeter = 0.5 * (faceA + faceB + faceC);
       float inRadius = area/semiPerimeter;
-      inCenters.push_back(incenter);
-      inRadii.push_back(inRadius);
+
+      InCircle incircle;
+      incircle.center = incenter;
+      incircle.radius = inRadius;
+      incircle.normal = normal;
+
+      inCircles.push_back(incircle);
     }
+
   private:
     // split string by spaces
     // https://stackoverflow.com/a/5888676
