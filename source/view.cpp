@@ -2,6 +2,7 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 Camera camera;
@@ -24,6 +25,7 @@ GLFWwindow* View::initialize_window()
   glfwSetCursorPosCallback(window, mouse_callback);
   glfwSetScrollCallback(window, scroll_callback);
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+  glfwSetMouseButtonCallback(window, mouse_button_callback);
 
   glewExperimental = GL_TRUE; 
   if ( GLEW_OK != glewInit() )
@@ -65,6 +67,14 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+  if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    print("HURRA");
+}
+
+
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
   if (camera.firstMouse)
