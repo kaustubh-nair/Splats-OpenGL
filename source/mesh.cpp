@@ -23,7 +23,7 @@ void Mesh::setup()
     //
 
     glm::vec3 v1 = *inCenter;
-    glm::vec3 v2 = v1 + ((*inRadius) * normalize(glm::vec3(faceNormal->z, 0, - faceNormal->x)));
+    glm::vec3 v2 = v1 + ((*inRadius)/10 * normalize(glm::vec3(faceNormal->z, 0, - faceNormal->x)));
     if(std::isnan(v1.x))
       continue;
     if(std::isnan(v2.x))
@@ -48,23 +48,41 @@ void Mesh::setup()
 
     inCircleVertices.insert(inCircleVertices.end(), {
         v1.x,  v1.y,  v1.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v2.x,  v2.y,  v2.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v3.x,  v3.y,  v3.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v1.x,  v1.y,  v1.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v3.x,  v3.y,  v3.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v4.x,  v4.y,  v4.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v1.x,  v1.y,  v1.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v4.x,  v4.y,  v4.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v5.x,  v5.y,  v5.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v1.x,  v1.y,  v1.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v5.x,  v5.y,  v5.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v6.x,  v6.y,  v6.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v1.x,  v1.y,  v1.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v6.x,  v6.y,  v6.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v7.x,  v7.y,  v7.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v1.x,  v1.y,  v1.z,          
+        faceNormal->x,faceNormal->y,faceNormal->z,
         v7.x,  v7.y,  v7.z,          
-        v2.x,  v2.y,  v2.z           
+        faceNormal->x,faceNormal->y,faceNormal->z,
+        v2.x,  v2.y,  v2.z          ,
+        faceNormal->x,faceNormal->y,faceNormal->z
         });
 
     inRadius++;
@@ -84,10 +102,11 @@ void Mesh::setup()
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
 
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)(3*sizeof(float)));
+  glEnableVertexAttribArray(1);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   
-
   glBindVertexArray(0);
 
   /*

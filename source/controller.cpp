@@ -13,7 +13,7 @@ void Controller::mainLoop( void )
   Shader shader("source/shaders/shader.vs", "source/shaders/shader.fs");
   Shader lightingShader("source/shaders/lighting_shader.vs", "source/shaders/lighting_shader.fs");
 
-  std::vector<std::string> filepaths = { "data/beethoven.ply" };
+  std::vector<std::string> filepaths = { "data/street_lamp.ply" };
   std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,0.0f)};
   //std::vector<std::string> filepaths = {"data/beethoven.ply", "data/shark.ply", "data/apple.ply" , "data/big_spider.ply"};
   //std::vector<glm::vec3> meshPos = {glm::vec3(-2.0,-2.0,-12.0), glm::vec3(5.0,0.0,-1.0), glm::vec3(5.0, -4.0, -1.0), glm::vec3(-5.0, 0.0, -1.0)};
