@@ -15,10 +15,11 @@ class Mesh {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     glm::vec3 position;
-    std::vector<float> inCircleVertices;
     std::vector<glm::vec3> faceNormals;
     std::vector<glm::vec3> inCenters;
     std::vector<float> inRadii;
+
+    std::vector<float> inCircleVertices;
 
     Mesh(std::string filepath);
     void setup();

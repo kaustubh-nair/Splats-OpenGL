@@ -1,4 +1,5 @@
 #include "../include/mesh.h"
+#include<cmath>
 
 Mesh::Mesh(std::string filepath)
 {
@@ -23,12 +24,18 @@ void Mesh::setup()
 
     glm::vec3 v1 = *inCenter;
     glm::vec3 v2 = v1 + ((*inRadius) * normalize(glm::vec3(faceNormal->z, 0, - faceNormal->x)));
+    if(std::isnan(v1.x))
+      continue;
+    if(std::isnan(v2.x))
+      continue;
 
     glm::mat4 rotationMat = glm::rotate(glm::mat4(1.0f), glm::radians(60.0f), *faceNormal);
     glm::vec3 v3 = glm::vec3(rotationMat * glm::vec4(glm::normalize(v2-v1),1.0f)) + v1;
 
     rotationMat = glm::rotate(glm::mat4(1.0f), glm::radians(120.0f), *faceNormal);
     glm::vec3 v4 = glm::vec3(rotationMat * glm::vec4(glm::normalize(v2-v1),1.0f)) + v1;
+    if(std::isnan(v3.x))
+      continue;
 
     rotationMat = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), *faceNormal);
     glm::vec3 v5 = glm::vec3(rotationMat * glm::vec4(glm::normalize(v2-v1),1.0f)) + v1;
