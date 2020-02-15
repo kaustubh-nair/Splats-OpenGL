@@ -7,24 +7,22 @@
 #include "../include/view.h"
 #include "../include/shader.h"
 #include "../include/model.h"
+#include "../include/camera.h"
 #include "../include/mesh.h"
 #include "../include/ply_parser.h"
 
-
 class Controller {
   public:
-    View *view = nullptr;
+    View view;
     GLFWwindow* mainWindow = nullptr;
 
     Controller()
     {
-      this->view = new View();
-      this->mainWindow = this->view->initialize_window();
+      this->mainWindow = this->view.initialize_window();
     };
 
     ~Controller()
     {
-      delete this->view;
     };
 
     void mainLoop();

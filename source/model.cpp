@@ -18,13 +18,13 @@ void Model::setup(std::vector<std::string> filepaths, std::vector<glm::vec3> mes
 
 }
 
-void Model::draw(float angle, Shader shader, Shader lightingShader)
+void Model::draw(Shader shader, Shader lightingShader)
 {
   std::vector<Mesh>::iterator mesh;
 
   for (mesh = meshes.begin(); mesh < meshes.end(); mesh++)
   {
-    (*mesh).draw(angle,shader);
+    (*mesh).draw(shader);
   }
   Lighting lighting;
   lighting.draw(lightingShader);

@@ -128,6 +128,7 @@ class PlyParser
       compute_vertex_normals(vertices);
     }
 
+    /* scale vertices to [-1,1] */
     void normalize_vertices(std::vector<Vertex> &vertices, float min, float max)
     {
       std::vector<Vertex>::iterator vertex;
@@ -140,10 +141,10 @@ class PlyParser
         y = vertex->position.y;
         z = vertex->position.z;
 
-        x = (x-min)/d;
-        y = (y-min)/d;
-        z = (z-min)/d;
-        vertex->position = glm::vec3(x,y,z);
+        x = (x-min)/d - 0.5;
+        y = (y-min)/d - 0.5;
+        z = (z-min)/d - 0.5;
+        vertex->position = glm::vec3(2*x, 2*y, 2*z);
       }
     }
 

@@ -23,9 +23,9 @@ class Mesh {
 
     Mesh(std::string filepath);
     void setup();
-    void draw(float angle, Shader shader);
+    void draw(Shader shader);
     void setupSplats();
-    void drawSplats(float angle, Shader shader);
+    void drawSplats(Shader shader);
     void computeInCirleVertices();
 
   private:

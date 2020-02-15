@@ -44,10 +44,9 @@ void Mesh::setup()
 }
 
 
-void Mesh::drawSplats(float angle, Shader shader)
+void Mesh::drawSplats(Shader shader)
 {
   glm::mat4 model = glm::translate(glm::mat4(1.0f), position);
-  model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0,1.0,0.0));
   shader.setVec3("vertexColor", 0.0f,0.1f,0.1f);
   shader.setMat4("model", model);
   glBindVertexArray(VAO); 
@@ -55,10 +54,12 @@ void Mesh::drawSplats(float angle, Shader shader)
 }
 
 
-void Mesh::draw(float angle, Shader shader)
+float angle = 0.0f;
+void Mesh::draw(Shader shader)
 {
+  angle++;
   glm::mat4 model = glm::translate(glm::mat4(1.0f), position);
-  model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0,1.0,0.0));
+  model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0f,1.0f,0.0f));
   shader.setVec3("vertexColor", 0.0f,0.1f,0.1f);
   shader.setMat4("model", model);
   //shader.setVec3("lightPos", lightPos);
