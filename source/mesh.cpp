@@ -23,7 +23,7 @@ void Mesh::setup()
     //
 
     glm::vec3 v1 = *inCenter;
-    glm::vec3 v2 = v1 + ((*inRadius)/10 * normalize(glm::vec3(faceNormal->z, 0, - faceNormal->x)));
+    glm::vec3 v2 = v1 + ((*inRadius) * normalize(glm::vec3(faceNormal->z, 0, - faceNormal->x)));
     if(std::isnan(v1.x))
       continue;
     if(std::isnan(v2.x))
@@ -138,7 +138,7 @@ void Mesh::setup()
 void Mesh::draw(float angle, Shader shader)
 {
   glm::mat4 model = glm::translate(glm::mat4(1.0f), position);
-  //model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0,1.0,0.0));
+  model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0,1.0,0.0));
   shader.setVec3("vertexColor", 0.0f,0.1f,0.1f);
   shader.setMat4("model", model);
   //shader.setVec3("lightPos", lightPos);
