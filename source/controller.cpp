@@ -36,7 +36,7 @@ void Controller::mainLoop( void )
     shader.use();
     shader.setMat4("projection", proj);
     shader.setMat4("view", view);
-    //shader.setVec3("objectColor", 0.7f, 0.3f, 1.0f);
+    shader.setVec3("objectColor", 0.7f, 0.3f, 1.0f);
     shader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
     shader.setVec3("lightPos",  0.0f, 0.0f ,0.0f);
 
