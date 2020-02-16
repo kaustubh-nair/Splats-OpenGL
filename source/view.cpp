@@ -43,69 +43,35 @@ glm::mat4 View::getViewMatrix()
 
 int View::listenToCallbacks(GLFWwindow *window)
 {
-  static int oldState1 = GLFW_RELEASE;
-  int newState = glfwGetKey(window, GLFW_KEY_ESCAPE) ;
-  if (newState == GLFW_RELEASE && oldState1 == GLFW_PRESS)
-    return UNSELECT_OBJECT;
-  oldState1 = newState;
+  static std::vector<int> oldStates(11, GLFW_RELEASE);
+  int newState;
 
-  newState = glfwGetKey(window, GLFW_KEY_1);
-  static int oldState2 = GLFW_RELEASE;
-   if (newState == GLFW_RELEASE && oldState1 == GLFW_PRESS)
-    return SELECT_OBJECT_1;
-  oldState1 = newState;
-
-  static int oldState3 = GLFW_RELEASE;
-   if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-    return SELECT_OBJECT_2;
-  oldState3 = newState;
-
-  static int oldState4 = GLFW_RELEASE;
-   if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-    return SELECT_OBJECT_3;
-  oldState4 = newState;
-
-  static int oldState5 = GLFW_RELEASE;
-   if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
-    return SELECT_OBJECT_4;
-  oldState5 = newState;
-
-  static int oldState6 = GLFW_RELEASE;
-   if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
-    return SELECT_OBJECT_5;
-  oldState6 = newState;
-
-  static int oldState7 = GLFW_RELEASE;
-   if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-    return SELECT_OBJECT_5;
-  oldState7 = newState;
-
-  static int oldState8 = GLFW_RELEASE;
-   if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-    return SELECT_OBJECT_5;
-  oldState8 = newState;
-
-  static int oldState9 = GLFW_RELEASE;
-  int newState9 = glfwGetKey(window, GLFW_KEY_UP);
-   if (oldState9 == GLFW_PRESS && newState9 == GLFW_RELEASE)
-    return SELECT_OBJECT_5;
-  oldState9 = newState9;
-
-  static int oldState11 = GLFW_RELEASE;
-  int newState11 = glfwGetKey(window, GLFW_KEY_MINUS);
-   if (oldState11 == GLFW_PRESS && newState11 == GLFW_RELEASE)
-   {
-      oldState11 = newState11;
-     return SCALE_OBJECT_DOWN;
-   }
-  oldState11 = newState11;
-
-  static int oldState10 = GLFW_RELEASE;
-  int newState10 = glfwGetKey(window, GLFW_KEY_DOWN);
-   if (oldState10 == GLFW_PRESS && newState10 == GLFW_RELEASE)
-    return SELECT_OBJECT_5;
-  oldState10 = newState10;
-
+  std::map<int,int> key_mappings = {
+    {GLFW_KEY_ESCAPE, UNSELECT_OBJECT},
+    {GLFW_KEY_1, SELECT_OBJECT_1},
+    {GLFW_KEY_2, SELECT_OBJECT_2},
+    {GLFW_KEY_3, SELECT_OBJECT_3},
+    {GLFW_KEY_4, SELECT_OBJECT_4},
+    {GLFW_KEY_5, SELECT_OBJECT_5},
+    {GLFW_KEY_RIGHT, TRANSLATE_OBJECT_RIGHT},
+    {GLFW_KEY_LEFT, TRANSLATE_OBJECT_LEFT},
+    {GLFW_KEY_UP, TRANSLATE_OBJECT_UP},
+    {GLFW_KEY_DOWN, TRANSLATE_OBJECT_DOWN},
+    {GLFW_KEY_MINUS, SCALE_OBJECT_DOWN}
+  };
+  int i = 0;
+  std::map<int, int>::iterator itr;
+  for (itr = key_mappings.begin(); itr != key_mappings.end(); itr++) 
+  {
+    newState = glfwGetKey(window, itr->first);
+    if( oldStates.at(i) == GLFW_PRESS && newState == GLFW_RELEASE)
+    {
+      oldStates.at(i) = newState;
+      return itr->second;
+    }
+    oldStates.at(i) = newState;
+    i++;
+  }
 
   static int oldState12 = GLFW_RELEASE;
    if (glfwGetKey(window, GLFW_KEY_EQUAL) == GLFW_PRESS && (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS))

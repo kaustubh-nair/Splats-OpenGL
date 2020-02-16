@@ -26,3 +26,6 @@
 
 #define SCALE_OBJECT_DOWN 17
 #define SCALE_OBJECT_UP 18
+
+#define CLOCKWISE 19
+#define ANTICLOCKWISE 20

@@ -105,6 +105,5 @@ void Controller::reactToCallback(int ret)
     case ROTATE_OBJECT_CLOCKWISE:
         model.rotate(UP);
         break;
-
   }
 }

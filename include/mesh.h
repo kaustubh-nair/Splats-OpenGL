@@ -31,6 +31,8 @@ class Mesh {
     void computeInCirleVertices();
     glm::mat4 model;
     void scale(int direction);
+    void translate(int direction);
+    void rotate(int direction);
 
   private:
     unsigned int VAO, VBO, EBO;

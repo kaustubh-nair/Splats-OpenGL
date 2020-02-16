@@ -2,6 +2,7 @@
 #include<cmath>
 
 int ID = 1;
+
 Mesh::Mesh(std::string filepath, glm::vec3 position)
 {
   id = ID;
@@ -14,6 +15,27 @@ Mesh::Mesh(std::string filepath, glm::vec3 position)
   model = glm::translate(glm::mat4(1.0f), position);
 }
 
+
+void Mesh::translate(int direction)
+{
+  if(direction == UP)
+    model = glm::translate(model, glm::vec3(0.0f, 0.2f,0.0f));
+  else if(direction == DOWN)
+    model = glm::translate(model, glm::vec3(0.0f, -0.2f,0.0f));
+  else if(direction == RIGHT)
+    model = glm::translate(model, glm::vec3(0.2f, 0.0f,0.0f));
+  else if(direction == LEFT)
+    model = glm::translate(model, glm::vec3(-0.2f, 0.0f,0.0f));
+}
+
+
+void Mesh::rotate(int direction)
+{
+  if(direction == CLOCKWISE)
+    model = glm::scale(model, glm::vec3(1.1,1.1,1.1));
+  else if(direction == ANTICLOCKWISE)
+    model = glm::scale(model, glm::vec3(0.9,0.9,0.9));
+}
 void Mesh::scale(int direction)
 {
   if(direction == UP)

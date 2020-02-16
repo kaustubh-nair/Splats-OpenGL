@@ -46,26 +46,40 @@ void Model::unselect()
       break;
     }
   }
+  selectedMesh = -1;
 }
 
-void Model::select(int direction)
+void Model::select(int id)
 {
-  if(selectedMesh == -1)
+  if(selectedMesh != -1)
     return;
+  selectedMesh = id;
+
+  std::vector<Mesh>::iterator mesh;
+  for (mesh = meshes.begin(); mesh < meshes.end(); mesh++)
+  {
+    if(mesh->id == id)
+    {
+      mesh->selected = true;
+      break;
+    }
+  }
 }
 
 void Model::translate(int direction)
 {
   if(selectedMesh == -1)
     return;
+  meshes[selectedMesh - 1].translate(direction);
 }
 
 
 void Model::scale(int direction)
 {
-  //if(selectedMesh == -1)
-    //return;
-  meshes[0].scale(DOWN);
+  if(selectedMesh == -1)
+    return;
+
+  meshes[selectedMesh - 1].scale(direction);
 }
 
 
@@ -73,6 +87,7 @@ void Model::rotate(int direction)
 {
   if(selectedMesh == -1)
     return;
+  meshes[selectedMesh - 1].rotate(direction);
 
 }
 //object selection code
