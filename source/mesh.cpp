@@ -1,8 +1,12 @@
 #include "../include/mesh.h"
 #include<cmath>
 
+int ID = 0;
 Mesh::Mesh(std::string filepath)
 {
+  id = ID;
+  selected = false;
+  ID++;
   PlyParser parser;
   parser.parse(filepath, vertices, indices); 
   inCircles = parser.inCircles;
@@ -57,7 +61,7 @@ void Mesh::drawSplats(Shader shader)
 float angle = 0.0f;
 void Mesh::draw(Shader shader)
 {
-  angle++;
+  angle += 0.1f;
   glm::mat4 model = glm::translate(glm::mat4(1.0f), position);
   model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0f,1.0f,0.0f));
   shader.setVec3("vertexColor", 0.0f,0.1f,0.1f);

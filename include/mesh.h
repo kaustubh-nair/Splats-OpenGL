@@ -11,8 +11,12 @@
 #include "../include/shader.h"
 
 
+extern int ID;
+
 class Mesh {
   public:
+    int id;
+    bool selected;
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
 

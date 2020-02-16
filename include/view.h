@@ -12,12 +12,17 @@
 
 #include "../include/camera.h"
 
+#define OBJECT_SELECTED 1;
+
 extern Camera camera;
+extern float WIDTH;
+extern float HEIGHT;
 
 class View {
   public:
+    glm::vec3 objPosition;  //temporary variable to store selected object position
     GLFWwindow* initialize_window();
-    void processInput(GLFWwindow *window);
+    int listenToCallbacks(GLFWwindow *window);
     glm::mat4 getViewMatrix();
   private:
 };

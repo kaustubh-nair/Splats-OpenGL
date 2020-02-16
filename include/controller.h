@@ -28,7 +28,6 @@ class Controller {
     void mainLoop();
 
   private:
-    glm::mat4 processInput(GLFWwindow* window);
 };
 
 
