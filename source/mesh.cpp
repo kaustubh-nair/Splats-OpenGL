@@ -1,15 +1,25 @@
 #include "../include/mesh.h"
 #include<cmath>
 
-int ID = 0;
-Mesh::Mesh(std::string filepath)
+int ID = 1;
+Mesh::Mesh(std::string filepath, glm::vec3 position)
 {
   id = ID;
   selected = false;
   ID++;
   PlyParser parser;
   parser.parse(filepath, vertices, indices); 
+  position = position;
   inCircles = parser.inCircles;
+  model = glm::translate(glm::mat4(1.0f), position);
+}
+
+void Mesh::scale(int direction)
+{
+  if(direction == UP)
+    model = glm::scale(model, glm::vec3(1.1,1.1,1.1));
+  else if(direction == DOWN)
+    model = glm::scale(model, glm::vec3(0.9,0.9,0.9));
 }
 
 void Mesh::setupSplats()
@@ -58,15 +68,10 @@ void Mesh::drawSplats(Shader shader)
 }
 
 
-float angle = 0.0f;
 void Mesh::draw(Shader shader)
 {
-  angle += 0.1f;
-  glm::mat4 model = glm::translate(glm::mat4(1.0f), position);
-  model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0f,1.0f,0.0f));
   shader.setVec3("vertexColor", 0.0f,0.1f,0.1f);
   shader.setMat4("model", model);
-  //shader.setVec3("lightPos", lightPos);
 
   glBindVertexArray(VAO); 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);

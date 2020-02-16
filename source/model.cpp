@@ -1,5 +1,9 @@
 #include "../include/model.h"
 
+Model::Model()
+{
+  selectedMesh = -1;
+}
 void Model::setup(std::vector<std::string> filepaths, std::vector<glm::vec3> meshPos)
 {
   std::vector<std::string>::iterator filepath;
@@ -7,8 +11,7 @@ void Model::setup(std::vector<std::string> filepaths, std::vector<glm::vec3> mes
 
   for (filepath = filepaths.begin(); filepath < filepaths.end(); filepath++)
   {
-    Mesh mesh(*filepath);
-    mesh.position = *position;
+    Mesh mesh(*filepath, *position);
     mesh.setup();
     meshes.push_back(mesh);
 
@@ -16,6 +19,7 @@ void Model::setup(std::vector<std::string> filepaths, std::vector<glm::vec3> mes
   }
 
 }
+
 
 void Model::draw(Shader shader, Shader lightingShader)
 {
@@ -29,6 +33,50 @@ void Model::draw(Shader shader, Shader lightingShader)
   lighting.draw(lightingShader);
 }
 
+
+void Model::unselect()
+{
+  std::vector<Mesh>::iterator mesh;
+
+  for (mesh = meshes.begin(); mesh < meshes.end(); mesh++)
+  {
+    if(mesh->id == selectedMesh)
+    {
+      mesh->selected = false;
+      break;
+    }
+  }
+}
+
+void Model::select(int direction)
+{
+  if(selectedMesh == -1)
+    return;
+}
+
+void Model::translate(int direction)
+{
+  if(selectedMesh == -1)
+    return;
+}
+
+
+void Model::scale(int direction)
+{
+  //if(selectedMesh == -1)
+    //return;
+  meshes[0].scale(DOWN);
+}
+
+
+void Model::rotate(int direction)
+{
+  if(selectedMesh == -1)
+    return;
+
+}
+//object selection code
+/*
 void Model::selectObject(glm::vec3 position)
 {
   std::vector<Mesh>::iterator mesh;
@@ -41,9 +89,8 @@ void Model::selectObject(glm::vec3 position)
   for (mesh = meshes.begin(); mesh < meshes.end(); mesh++)
   {
     float distance;
-    glm::vec3 objPos = glm::normalize(mesh->position);
+    glm::vec3 objPos = mesh->position/6.0f;
     distance = glm::distance(glm::vec2(objPos.x, objPos.y), glm::vec2(position.x, position.y));
-    print(distance);
 
     if(distance < 0.6f)
       minIds.push_back(mesh->id);
@@ -76,7 +123,11 @@ void Model::selectObject(glm::vec3 position)
     if(mesh->id == minId)
     {
       mesh->selected = true;
+      //print(mesh->id);
       break;
     }
   }
 }
+*/
+
+

@@ -23,17 +23,18 @@ class Mesh {
     std::vector<InCircle> inCircles;
     std::vector<Vertex> inCircleVertices;
 
-    glm::vec3 position;
-
-    Mesh(std::string filepath);
+    Mesh(std::string filepath, glm::vec3 position);
     void setup();
     void draw(Shader shader);
     void setupSplats();
     void drawSplats(Shader shader);
     void computeInCirleVertices();
+    glm::mat4 model;
+    void scale(int direction);
 
   private:
     unsigned int VAO, VBO, EBO;
+    glm::vec3 position;
 
 };
 

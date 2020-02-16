@@ -10,8 +10,6 @@ void Controller::mainLoop( void )
 
   GLFWwindow* window = this->mainWindow;
 
-  Model model;
-
   /* load ply files into model */
   //std::vector<std::string> filepaths = { "data/sphere.ply" };
   //std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,-3.0f)};
@@ -28,23 +26,21 @@ void Controller::mainLoop( void )
 
   glEnable(GL_DEPTH_TEST);
 
-  glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
   glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+  glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
 
   while(!glfwWindowShouldClose(window))
   {
 
-    if(view.listenToCallbacks(window) == 1)
-    {
-      model.selectObject(view.objPosition);
-    }
+    int ret = view.listenToCallbacks(window);
+
+    reactToCallback(ret);
 
     glClearColor(0.1f,0.1f,0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     viewMatrix = view.getViewMatrix();
-
 
     shader.use();
     shader.setMat4("projection", proj);
@@ -63,4 +59,52 @@ void Controller::mainLoop( void )
     glfwPollEvents();
   }
   glfwTerminate();
+}
+
+
+void Controller::reactToCallback(int ret)
+{
+  switch(ret)
+  {
+    case UNSELECT_OBJECT:
+        model.unselect();
+        break;
+    case SELECT_OBJECT_1:
+        model.select(1);
+        break;
+    case SELECT_OBJECT_2:
+        model.select(2);
+        break;
+    case SELECT_OBJECT_3:
+        model.select(3);
+        break;
+    case SELECT_OBJECT_4:
+        model.select(4);
+        break;
+    case TRANSLATE_OBJECT_UP:
+        model.translate(UP);
+        break;
+    case TRANSLATE_OBJECT_LEFT:
+        model.translate(LEFT);
+        break;
+    case TRANSLATE_OBJECT_RIGHT:
+        model.translate(RIGHT);
+        break;
+    case TRANSLATE_OBJECT_DOWN:
+        model.translate(DOWN);
+        break;
+    case SCALE_OBJECT_DOWN:
+        model.scale(DOWN);
+        break;
+    case SCALE_OBJECT_UP:
+        model.scale(UP);
+        break;
+    case ROTATE_OBJECT_ANTI_CLOCKWISE:
+        model.rotate(DOWN);
+        break;
+    case ROTATE_OBJECT_CLOCKWISE:
+        model.rotate(UP);
+        break;
+
+  }
 }

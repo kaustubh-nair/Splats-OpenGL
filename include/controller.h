@@ -14,6 +14,7 @@
 class Controller {
   public:
     View view;
+    Model model;
     GLFWwindow* mainWindow = nullptr;
 
     Controller()
@@ -26,6 +27,7 @@ class Controller {
     };
 
     void mainLoop();
+    void reactToCallback(int ret);
 
   private:
 };

@@ -11,8 +11,8 @@
 #include <iostream>
 
 #include "../include/camera.h"
+#include "../include/definitions.h"
 
-#define OBJECT_SELECTED 1;
 
 extern Camera camera;
 extern float WIDTH;
