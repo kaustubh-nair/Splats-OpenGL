@@ -12,7 +12,7 @@ void Model::setup(std::vector<std::string> filepaths, std::vector<glm::vec3> mes
   for (filepath = filepaths.begin(); filepath < filepaths.end(); filepath++)
   {
     Mesh mesh(*filepath, *position);
-    mesh.setup();
+    mesh.setupSplats();
     meshes.push_back(mesh);
 
     position++;
@@ -27,7 +27,7 @@ void Model::draw(Shader shader, Shader lightingShader)
 
   for (mesh = meshes.begin(); mesh < meshes.end(); mesh++)
   {
-    (*mesh).draw(shader);
+    (*mesh).drawSplats(shader);
   }
   Lighting lighting;
   lighting.draw(lightingShader);

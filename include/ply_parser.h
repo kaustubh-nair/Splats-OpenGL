@@ -109,7 +109,6 @@ class PlyParser
             indices.push_back(v2);
             indices.push_back(v3);
 
-            compute_incircle(normal,a,b,c);
 
             j--;
           }
@@ -126,6 +125,7 @@ class PlyParser
       }
       normalize_vertices(vertices, min, max);
       compute_vertex_normals(vertices);
+      compute_incircle(vertices, indices);
     }
 
     /* scale vertices to [-1,1] */
@@ -165,30 +165,37 @@ class PlyParser
     }
 
 
-    void compute_incircle(glm::vec3 normal, Vertex a, Vertex b, Vertex c)
+    void compute_incircle(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
     {
-      float area = 0.5 * glm::length( glm::cross(a.position - c.position, b.position - c.position) );
+      for(int i = 0; i < indices.size(); i+=3)
+      {
+        Vertex a = vertices[indices[i]];
+        Vertex b = vertices[indices[i+1]];
+        Vertex c = vertices[indices[i+2]];
+        glm::vec3 normal = glm::normalize( glm::cross(b.position - a.position, c.position - a.position) );
 
-      float faceA = glm::length(b.position - c.position);
-      float faceB = glm::length(a.position - c.position);
-      float faceC = glm::length(a.position - b.position);
+        float area = 0.5 * glm::length( glm::cross(a.position - c.position, b.position - c.position) );
+        float faceA = glm::length(b.position - c.position);
+        float faceB = glm::length(a.position - c.position);
+        float faceC = glm::length(a.position - b.position);
 
-      float incenterX = (faceA*a.position.x) + (faceB * b.position.x) + (faceC * c.position.x);
-      float incenterY = (faceA*a.position.y) + (faceB * b.position.y) + (faceC * c.position.y);
-      float incenterZ = (faceA*a.position.z) + (faceB * b.position.z) + (faceC * c.position.z);
+        float incenterX = (faceA*a.position.x) + (faceB * b.position.x) + (faceC * c.position.x);
+        float incenterY = (faceA*a.position.y) + (faceB * b.position.y) + (faceC * c.position.y);
+        float incenterZ = (faceA*a.position.z) + (faceB * b.position.z) + (faceC * c.position.z);
 
-      glm::vec3 incenter = glm::vec3( incenterX, incenterY, incenterZ);
-      incenter = incenter/(faceA + faceB + faceC);
+        glm::vec3 incenter = glm::vec3( incenterX, incenterY, incenterZ);
+        incenter = incenter/(faceA + faceB + faceC);
 
-      float semiPerimeter = 0.5 * (faceA + faceB + faceC);
-      float inRadius = area/semiPerimeter;
+        float semiPerimeter = 0.5 * (faceA + faceB + faceC);
+        float inRadius = area/semiPerimeter;
 
-      InCircle incircle;
-      incircle.center = incenter;
-      incircle.radius = inRadius;
-      incircle.normal = normal;
+        InCircle incircle;
+        incircle.center = incenter;
+        incircle.radius = inRadius;
+        incircle.normal = glm::normalize(normal);
 
-      inCircles.push_back(incircle);
+        inCircles.push_back(incircle);
+      }
     }
 
   private:

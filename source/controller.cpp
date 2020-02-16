@@ -11,7 +11,7 @@ void Controller::mainLoop( void )
   GLFWwindow* window = this->mainWindow;
 
   /* load ply files into model */
-  //std::vector<std::string> filepaths = { "data/sphere.ply" };
+  //std::vector<std::string> filepaths = { "data/beethoven.ply" };
   //std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,-3.0f)};
   std::vector<std::string> filepaths = {"data/beethoven.ply", "data/shark.ply", "data/apple.ply" , "data/big_spider.ply"};
   std::vector<glm::vec3> meshPos = {glm::vec3(0.01f,0.0f,0.0f), glm::vec3(2.5f,0.0f,0.0f), glm::vec3(-2.5f,-2.5f,0.0f), glm::vec3(-2.5f,0.0f,0.0f)};
@@ -27,7 +27,6 @@ void Controller::mainLoop( void )
   glEnable(GL_DEPTH_TEST);
 
   glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-  glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
 
   while(!glfwWindowShouldClose(window))

@@ -36,6 +36,8 @@ void Mesh::rotate(int direction)
   else if(direction == ANTICLOCKWISE)
     model = glm::scale(model, glm::vec3(0.9,0.9,0.9));
 }
+
+
 void Mesh::scale(int direction)
 {
   if(direction == UP)
@@ -43,6 +45,7 @@ void Mesh::scale(int direction)
   else if(direction == DOWN)
     model = glm::scale(model, glm::vec3(0.9,0.9,0.9));
 }
+
 
 void Mesh::setupSplats()
 {
@@ -59,8 +62,9 @@ void Mesh::setupSplats()
   glEnableVertexAttribArray(1);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
-
 }
+
+
 void Mesh::setup()
 {
   glGenVertexArrays(1, &VAO);
@@ -80,11 +84,15 @@ void Mesh::setup()
 }
 
 
+float angle = 0.0f;
 void Mesh::drawSplats(Shader shader)
 {
-  glm::mat4 model = glm::translate(glm::mat4(1.0f), position);
+  angle++;
   shader.setVec3("vertexColor", 0.0f,0.1f,0.1f);
   shader.setMat4("model", model);
+  model = glm::translate(glm::mat4(1.0f), position);
+  model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0f,1.0f,0.0f));
+  model = glm::scale(model, glm::vec3(1.5,1.5,1.5));
   glBindVertexArray(VAO); 
   glDrawArrays(GL_TRIANGLES, 0, inCircleVertices.size());
 }
@@ -105,21 +113,23 @@ void Mesh::computeInCirleVertices()
 {
   std::vector<InCircle>::iterator inCircle;
 
-  int num_segments;
+  int num_segments = 6;
 
   Vertex v;
-  for(inCircle = inCircles.begin(); inCircle < inCircles.end(); inCircle++);
+  for(inCircle = inCircles.begin(); inCircle < inCircles.end(); inCircle++)
   {
+    float radius = 0.1 * inCircle->radius;
     glm::vec3 v1 = inCircle->center;
-    glm::vec3 v2 = v1 + (inCircle->radius * normalize(glm::vec3(v.normal.z, 0, - v.normal.x)));
+    glm::vec3 v2 = v1 + (radius * normalize(glm::vec3(v.normal.z, 0, - v.normal.x)));
     v.position = v1;
     v.normal = inCircle->normal;
     inCircleVertices.push_back(v);
 
-
     v.position = v2;
     inCircleVertices.push_back(v);
+    v.position = v1;
 
+    /*
     float angle = 360.0f/num_segments;
     for(int i = 1; i < num_segments; i++)
     {
@@ -127,6 +137,6 @@ void Mesh::computeInCirleVertices()
       glm::vec3 v3 = glm::vec3(rotationMat * glm::vec4(glm::normalize(v2-v1),1.0f)) + v1;
       v.position = v3;
       inCircleVertices.push_back(v);
-    }
+    }*/
   }
 }
