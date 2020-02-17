@@ -108,6 +108,15 @@ void Model::rotate(int direction)
   meshes[this->selectedMesh - 1].rotate(direction);
 
 }
+
+void Model::changeSplatRadius(int direction)
+{
+  if(this->selectedMesh == -1)
+    return;
+  meshes[this->selectedMesh - 1].changeSplatRadius(direction);
+}
+
+
 //object selection code
 /*
 void Model::selectObject(glm::vec3 position)

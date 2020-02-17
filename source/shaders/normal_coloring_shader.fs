@@ -6,7 +6,7 @@ in vec3 FragPos;
   
 uniform vec3 lightPos; 
 uniform vec3 lightColor;
-uniform vec3 objectColor;
+in vec3 objectColor;
 
 void main()
 {

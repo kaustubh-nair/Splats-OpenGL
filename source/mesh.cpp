@@ -13,39 +13,8 @@ Mesh::Mesh(std::string filepath, glm::vec3 position)
   position = position;
   inCircles = parser.inCircles;
   model = glm::translate(glm::mat4(1.0f), position);
+  splatMultipler = 1.0f;
 }
-
-
-void Mesh::translate(int direction)
-{
-  if(direction == UP)
-    model = glm::translate(model, glm::vec3(0.0f, 0.2f,0.0f));
-  else if(direction == DOWN)
-    model = glm::translate(model, glm::vec3(0.0f, -0.2f,0.0f));
-  else if(direction == RIGHT)
-    model = glm::translate(model, glm::vec3(0.2f, 0.0f,0.0f));
-  else if(direction == LEFT)
-    model = glm::translate(model, glm::vec3(-0.2f, 0.0f,0.0f));
-}
-
-
-void Mesh::rotate(int direction)
-{
-  if(direction == CLOCKWISE)
-    model = glm::scale(model, glm::vec3(1.1,1.1,1.1));
-  else if(direction == ANTICLOCKWISE)
-    model = glm::scale(model, glm::vec3(0.9,0.9,0.9));
-}
-
-
-void Mesh::scale(int direction)
-{
-  if(direction == UP)
-    model = glm::scale(model, glm::vec3(1.1,1.1,1.1));
-  else if(direction == DOWN)
-    model = glm::scale(model, glm::vec3(0.9,0.9,0.9));
-}
-
 
 void Mesh::setupSplats()
 {
@@ -84,14 +53,10 @@ void Mesh::setup()
 }
 
 
-float angle = 0.0f;
 void Mesh::drawSplats(Shader shader)
 {
-  angle++;
-  shader.setVec3("vertexColor", 0.0f,0.1f,0.1f);
   shader.setMat4("model", model);
-  //model = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0.0f,1.0f,0.0f));
-  //model = glm::scale(model, glm::vec3(1.5,1.5,1.5));
+
   glBindVertexArray(VAO); 
   glDrawArrays(GL_TRIANGLES, 0, inCircleVertices.size());
 }
@@ -99,7 +64,6 @@ void Mesh::drawSplats(Shader shader)
 
 void Mesh::draw(Shader shader)
 {
-  shader.setVec3("vertexColor", 0.0f,0.1f,0.1f);
   shader.setMat4("model", model);
 
   glBindVertexArray(VAO); 
@@ -110,14 +74,13 @@ void Mesh::draw(Shader shader)
 
 void Mesh::computeInCirleVertices()
 {
+  inCircleVertices.clear();
   std::vector<InCircle>::iterator inCircle;
-
-  int num_segments = 7;
-
+  int num_segments = 10;
   Vertex v;
   for(inCircle = inCircles.begin(); inCircle < inCircles.end(); inCircle++)
   {
-    int k = 1;
+    float k = this->splatMultipler;
     float radius = k * inCircle->radius;
     glm::vec3 v1 = inCircle->center;
     glm::vec3 v2 = v1 + (radius * normalize(glm::vec3(v.normal.z, 0, - v.normal.x)));
@@ -144,3 +107,49 @@ void Mesh::computeInCirleVertices()
     inCircleVertices.push_back(v);
   }
 }
+
+void Mesh::translate(int direction)
+{
+  if(direction == UP)
+    model = glm::translate(model, glm::vec3(0.0f, 0.2f,0.0f));
+  else if(direction == DOWN)
+    model = glm::translate(model, glm::vec3(0.0f, -0.2f,0.0f));
+  else if(direction == RIGHT)
+    model = glm::translate(model, glm::vec3(0.2f, 0.0f,0.0f));
+  else if(direction == LEFT)
+    model = glm::translate(model, glm::vec3(-0.2f, 0.0f,0.0f));
+}
+
+
+void Mesh::rotate(int direction)
+{
+  if(direction == CLOCKWISE)
+    model = glm::scale(model, glm::vec3(1.1,1.1,1.1));
+  else if(direction == ANTICLOCKWISE)
+    model = glm::scale(model, glm::vec3(0.9,0.9,0.9));
+}
+
+
+void Mesh::scale(int direction)
+{
+  if(direction == UP)
+    model = glm::scale(model, glm::vec3(1.1,1.1,1.1));
+  else if(direction == DOWN)
+    model = glm::scale(model, glm::vec3(0.9,0.9,0.9));
+}
+
+
+void Mesh::changeSplatRadius(int direction)
+{
+  if(direction == UP)
+  {
+    this->splatMultipler += 0.1f;
+    this->setupSplats();
+  }
+  else if(direction == DOWN)
+  {
+    this->splatMultipler -= 0.1f;
+    this->setupSplats();
+  }
+}
+

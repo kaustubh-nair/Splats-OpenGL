@@ -20,6 +20,7 @@ class Model
     void translate(int direction);
     void scale(int direction);
     void rotate(int direction);
+    void changeSplatRadius(int direction);
 
     bool renderSplats;
   private:

@@ -11,15 +11,16 @@ void Controller::mainLoop( void )
   GLFWwindow* window = this->mainWindow;
 
   /* load ply files into model */
-  std::vector<std::string> filepaths = { "data/beethoven.ply" };
-  std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,-3.0f)};
-  //std::vector<std::string> filepaths = {"data/beethoven.ply", "data/shark.ply", "data/apple.ply" , "data/big_spider.ply"};
-  //std::vector<glm::vec3> meshPos = {glm::vec3(0.01f,0.0f,0.0f), glm::vec3(2.5f,0.0f,0.0f), glm::vec3(-2.5f,-2.5f,0.0f), glm::vec3(-2.5f,0.0f,0.0f)};
+  //std::vector<std::string> filepaths = { "data/beethoven.ply" };
+  //std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,-3.0f)};
+  std::vector<std::string> filepaths = {"data/beethoven.ply", "data/shark.ply", "data/apple.ply" , "data/big_spider.ply"};
+  std::vector<glm::vec3> meshPos = {glm::vec3(0.01f,0.0f,0.0f), glm::vec3(2.5f,0.0f,0.0f), glm::vec3(-2.5f,-2.5f,0.0f), glm::vec3(-2.5f,0.0f,0.0f)};
   model.setup(filepaths, meshPos);
 
   /* setup shaders */
   Shader shader("source/shaders/shader.vs", "source/shaders/shader.fs");
   Shader lightingShader("source/shaders/lighting_shader.vs", "source/shaders/lighting_shader.fs");
+  Shader normalColoringShader("source/shaders/normal_coloring_shader.vs", "source/shaders/normal_coloring_shader.fs");
 
   glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);  //if changing this, change in mouse callback too
   glm::mat4 viewMatrix = view.getViewMatrix();
@@ -40,10 +41,15 @@ void Controller::mainLoop( void )
 
     viewMatrix = view.getViewMatrix();
 
-    shader.use();
+    if(this->normalColoring)
+      normalColoringShader.use();
+    else
+    {
+      shader.use();
+      shader.setVec3("objectColor", 0.5f, 0.1f, 0.1f);
+    }
     shader.setMat4("projection", proj);
     shader.setMat4("view", viewMatrix);
-    //shader.setVec3("objectColor", 0.7f, 0.5f, 1.0f);
     shader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
     shader.setVec3("lightPos",  0.0f, 0.0f ,5.0f);
 
@@ -108,7 +114,16 @@ void Controller::reactToCallback(int ret)
         model.refresh();
         break;
     case TOGGLE_WIREFRAME:
-        toggleWireframe();
+        this->toggleWireframe();
+        break;
+    case INCREASE_SPLAT_RADIUS:
+        model.changeSplatRadius(UP);
+        break;
+    case DECREASE_SPLAT_RADIUS:
+        model.changeSplatRadius(DOWN);
+        break;
+    case TOGGLE_NORMAL_COLORING:
+        this->normalColoring = !this->normalColoring;
         break;
   }
 }

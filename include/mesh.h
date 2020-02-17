@@ -33,9 +33,11 @@ class Mesh {
     void scale(int direction);
     void translate(int direction);
     void rotate(int direction);
+    void changeSplatRadius(int direction);
 
   private:
     unsigned int VAO, VBO, EBO;
+    float splatMultipler;
     glm::vec3 position;
 
 };

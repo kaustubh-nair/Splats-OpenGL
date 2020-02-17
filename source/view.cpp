@@ -43,8 +43,6 @@ glm::mat4 View::getViewMatrix()
 
 int View::listenToCallbacks(GLFWwindow *window)
 {
-  static std::vector<int> oldStates(13, GLFW_RELEASE);
-  int newState;
 
   std::map<int,int> key_mappings = {
     {GLFW_KEY_ESCAPE, UNSELECT_OBJECT},
@@ -59,8 +57,16 @@ int View::listenToCallbacks(GLFWwindow *window)
     {GLFW_KEY_DOWN, TRANSLATE_OBJECT_DOWN},
     {GLFW_KEY_MINUS, SCALE_OBJECT_DOWN},
     {GLFW_KEY_S, TOGGLE_SPLATS},
-    {GLFW_KEY_W, TOGGLE_WIREFRAME}
+    {GLFW_KEY_W, TOGGLE_WIREFRAME},
+    {GLFW_KEY_J, DECREASE_SPLAT_RADIUS},
+    {GLFW_KEY_K, INCREASE_SPLAT_RADIUS},
+    {GLFW_KEY_N, TOGGLE_NORMAL_COLORING},
+
   };
+
+  static std::vector<int> oldStates(key_mappings.size(), GLFW_RELEASE);
+  int newState;
+
   int i = 0;
   std::map<int, int>::iterator itr;
   for (itr = key_mappings.begin(); itr != key_mappings.end(); itr++) 
