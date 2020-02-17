@@ -144,7 +144,7 @@ class PlyParser
         x = (x-min)/d - 0.5;
         y = (y-min)/d - 0.5;
         z = (z-min)/d - 0.5;
-        vertex->position = glm::vec3(2*x, 2*y, 2*z);
+        vertex->position = glm::vec3(x,y,z);
       }
     }
 

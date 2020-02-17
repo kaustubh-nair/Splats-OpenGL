@@ -62,8 +62,11 @@ void Mesh::drawSplats(Shader shader)
 }
 
 
+float angle = 0.0f;
 void Mesh::draw(Shader shader)
 {
+  angle += 1.0f;
+  //model = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0.0f,1.0f,0.0f));
   shader.setMat4("model", model);
 
   glBindVertexArray(VAO); 

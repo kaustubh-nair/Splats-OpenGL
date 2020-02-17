@@ -12,7 +12,7 @@ void Controller::mainLoop( void )
 
   /* load ply files into model */
   //std::vector<std::string> filepaths = { "data/beethoven.ply" };
-  //std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,-3.0f)};
+  //std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,-1.5f)};
   std::vector<std::string> filepaths = {"data/beethoven.ply", "data/shark.ply", "data/apple.ply" , "data/big_spider.ply"};
   std::vector<glm::vec3> meshPos = {glm::vec3(0.01f,0.0f,0.0f), glm::vec3(2.5f,0.0f,0.0f), glm::vec3(-2.5f,-2.5f,0.0f), glm::vec3(-2.5f,0.0f,0.0f)};
   model.setup(filepaths, meshPos);
