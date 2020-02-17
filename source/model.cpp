@@ -13,12 +13,26 @@ void Model::setup(std::vector<std::string> filepaths, std::vector<glm::vec3> mes
   for (filepath = filepaths.begin(); filepath < filepaths.end(); filepath++)
   {
     Mesh mesh(*filepath, *position);
-    mesh.setupSplats();
+    mesh.setup();
     meshes.push_back(mesh);
 
     position++;
   }
 
+}
+
+void Model::refresh()
+{
+  std::vector<Mesh>::iterator mesh;
+
+  for (mesh = meshes.begin(); mesh < meshes.end(); mesh++)
+  {
+    if(this->renderSplats)
+      mesh->setupSplats();
+    else
+      mesh->setup();
+
+  }
 }
 
 
@@ -28,7 +42,10 @@ void Model::draw(Shader shader, Shader lightingShader)
 
   for (mesh = meshes.begin(); mesh < meshes.end(); mesh++)
   {
-    (*mesh).drawSplats(shader);
+    if(this->renderSplats)
+      mesh->drawSplats(shader);
+    else
+      mesh->draw(shader);
   }
   Lighting lighting;
   lighting.draw(lightingShader);
@@ -41,20 +58,20 @@ void Model::unselect()
 
   for (mesh = meshes.begin(); mesh < meshes.end(); mesh++)
   {
-    if(mesh->id == selectedMesh)
+    if(mesh->id == this->selectedMesh)
     {
       mesh->selected = false;
       break;
     }
   }
-  selectedMesh = -1;
+  this->selectedMesh = -1;
 }
 
 void Model::select(int id)
 {
-  if(selectedMesh != -1)
+  if(this->selectedMesh != -1)
     return;
-  selectedMesh = id;
+  this->selectedMesh = id;
 
   std::vector<Mesh>::iterator mesh;
   for (mesh = meshes.begin(); mesh < meshes.end(); mesh++)
@@ -69,26 +86,26 @@ void Model::select(int id)
 
 void Model::translate(int direction)
 {
-  if(selectedMesh == -1)
+  if(this->selectedMesh == -1)
     return;
-  meshes[selectedMesh - 1].translate(direction);
+  meshes[this->selectedMesh - 1].translate(direction);
 }
 
 
 void Model::scale(int direction)
 {
-  if(selectedMesh == -1)
+  if(this->selectedMesh == -1)
     return;
 
-  meshes[selectedMesh - 1].scale(direction);
+  meshes[this->selectedMesh - 1].scale(direction);
 }
 
 
 void Model::rotate(int direction)
 {
-  if(selectedMesh == -1)
+  if(this->selectedMesh == -1)
     return;
-  meshes[selectedMesh - 1].rotate(direction);
+  meshes[this->selectedMesh - 1].rotate(direction);
 
 }
 //object selection code

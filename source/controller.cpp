@@ -105,6 +105,7 @@ void Controller::reactToCallback(int ret)
         break;
     case TOGGLE_SPLATS:
         model.renderSplats = !model.renderSplats;
+        model.refresh();
         break;
     case TOGGLE_WIREFRAME:
         toggleWireframe();
@@ -114,9 +115,9 @@ void Controller::reactToCallback(int ret)
 
 void Controller::toggleWireframe()
 {
-  GLint polygonMode;
-  glGetIntegerv(GL_POLYGON_MODE, &polygonMode);
-  if ( polygonMode == GL_LINE )
+  GLint polygonMode[2];
+  glGetIntegerv(GL_POLYGON_MODE, polygonMode);
+  if ( polygonMode[0] == GL_LINE )
     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
   else
     glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );

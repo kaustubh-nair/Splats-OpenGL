@@ -13,6 +13,7 @@ class Model
     void draw_lighting( Shader shader);
     void draw(Shader shader, Shader lightingShader);
     void setup(std::vector<std::string> filepaths, std::vector<glm::vec3> locations);
+    void refresh();
 
     void unselect();
     void select(int direction);

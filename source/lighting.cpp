@@ -20,7 +20,6 @@ void Lighting::setup()
 void Lighting::draw(Shader shader)
 {
   glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-  model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
   shader.setMat4("model", model);
 
   // render the cube
