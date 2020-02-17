@@ -117,7 +117,8 @@ void Mesh::computeInCirleVertices()
   Vertex v;
   for(inCircle = inCircles.begin(); inCircle < inCircles.end(); inCircle++)
   {
-    float radius = 0.1 * inCircle->radius;
+    int k = 1;
+    float radius = k * inCircle->radius;
     glm::vec3 v1 = inCircle->center;
     glm::vec3 v2 = v1 + (radius * normalize(glm::vec3(v.normal.z, 0, - v.normal.x)));
     v.position = v1;
@@ -128,17 +129,18 @@ void Mesh::computeInCirleVertices()
     inCircleVertices.push_back(v);
     v.position = v1;
 
+    glm::mat4 rotationMat = glm::rotate(glm::mat4(1.0f), glm::radians(60.0f), glm::normalize(inCircle->normal));
+    glm::vec3 v3 = glm::vec3(rotationMat * glm::vec4(v2-v1,1.0f)) + v1;
+    v.position = v3;
+    inCircleVertices.push_back(v);
+    /*
     float angle = 360.0f/num_segments;
     for(int i = 1; i < num_segments; i++)
     {
       glm::mat4 rotationMat = glm::rotate(glm::mat4(1.0f), glm::radians(angle*i), glm::normalize(inCircle->normal));
-      glm::vec3 v3 = glm::vec3(rotationMat * glm::vec4(v2-v1,1.0f));
-      print("dist");
-      print(glm::distance(v3,v1));
-      print("radious");
-      print(radius);
+      glm::vec3 v3 = glm::vec3(rotationMat * glm::vec4(v2-v1,1.0f)) + v1;
       v.position = v3;
       inCircleVertices.push_back(v);
-    }
+    }*/
   }
 }
