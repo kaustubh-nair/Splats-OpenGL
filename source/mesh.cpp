@@ -90,9 +90,8 @@ void Mesh::drawSplats(Shader shader)
   angle++;
   shader.setVec3("vertexColor", 0.0f,0.1f,0.1f);
   shader.setMat4("model", model);
-  model = glm::translate(glm::mat4(1.0f), position);
-  model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0f,1.0f,0.0f));
-  model = glm::scale(model, glm::vec3(1.5,1.5,1.5));
+  //model = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0.0f,1.0f,0.0f));
+  //model = glm::scale(model, glm::vec3(1.5,1.5,1.5));
   glBindVertexArray(VAO); 
   glDrawArrays(GL_TRIANGLES, 0, inCircleVertices.size());
 }

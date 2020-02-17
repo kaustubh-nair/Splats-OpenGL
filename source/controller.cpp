@@ -11,10 +11,10 @@ void Controller::mainLoop( void )
   GLFWwindow* window = this->mainWindow;
 
   /* load ply files into model */
-  //std::vector<std::string> filepaths = { "data/beethoven.ply" };
-  //std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,-3.0f)};
-  std::vector<std::string> filepaths = {"data/beethoven.ply", "data/shark.ply", "data/apple.ply" , "data/big_spider.ply"};
-  std::vector<glm::vec3> meshPos = {glm::vec3(0.01f,0.0f,0.0f), glm::vec3(2.5f,0.0f,0.0f), glm::vec3(-2.5f,-2.5f,0.0f), glm::vec3(-2.5f,0.0f,0.0f)};
+  std::vector<std::string> filepaths = { "data/beethoven.ply" };
+  std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,-3.0f)};
+  //std::vector<std::string> filepaths = {"data/beethoven.ply", "data/shark.ply", "data/apple.ply" , "data/big_spider.ply"};
+  //std::vector<glm::vec3> meshPos = {glm::vec3(0.01f,0.0f,0.0f), glm::vec3(2.5f,0.0f,0.0f), glm::vec3(-2.5f,-2.5f,0.0f), glm::vec3(-2.5f,0.0f,0.0f)};
   model.setup(filepaths, meshPos);
 
   /* setup shaders */
@@ -27,7 +27,6 @@ void Controller::mainLoop( void )
   glEnable(GL_DEPTH_TEST);
 
   glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-
 
   while(!glfwWindowShouldClose(window))
   {
@@ -104,5 +103,21 @@ void Controller::reactToCallback(int ret)
     case ROTATE_OBJECT_CLOCKWISE:
         model.rotate(UP);
         break;
+    case TOGGLE_SPLATS:
+        model.renderSplats = !model.renderSplats;
+        break;
+    case TOGGLE_WIREFRAME:
+        toggleWireframe();
+        break;
   }
+}
+
+void Controller::toggleWireframe()
+{
+  GLint polygonMode;
+  glGetIntegerv(GL_POLYGON_MODE, &polygonMode);
+  if ( polygonMode == GL_LINE )
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+  else
+    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 }

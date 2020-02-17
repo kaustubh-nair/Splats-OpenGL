@@ -28,6 +28,7 @@ class Controller {
 
     void mainLoop();
     void reactToCallback(int ret);
+    void toggleWireframe();
 
   private:
 };

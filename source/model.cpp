@@ -3,6 +3,7 @@
 Model::Model()
 {
   selectedMesh = -1;
+  renderSplats = false;
 }
 void Model::setup(std::vector<std::string> filepaths, std::vector<glm::vec3> meshPos)
 {

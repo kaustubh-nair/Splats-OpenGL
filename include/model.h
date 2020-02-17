@@ -19,6 +19,8 @@ class Model
     void translate(int direction);
     void scale(int direction);
     void rotate(int direction);
+
+    bool renderSplats;
   private:
     std::vector<Mesh> meshes;
     int selectedMesh;

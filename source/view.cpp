@@ -43,7 +43,7 @@ glm::mat4 View::getViewMatrix()
 
 int View::listenToCallbacks(GLFWwindow *window)
 {
-  static std::vector<int> oldStates(11, GLFW_RELEASE);
+  static std::vector<int> oldStates(13, GLFW_RELEASE);
   int newState;
 
   std::map<int,int> key_mappings = {
@@ -57,7 +57,9 @@ int View::listenToCallbacks(GLFWwindow *window)
     {GLFW_KEY_LEFT, TRANSLATE_OBJECT_LEFT},
     {GLFW_KEY_UP, TRANSLATE_OBJECT_UP},
     {GLFW_KEY_DOWN, TRANSLATE_OBJECT_DOWN},
-    {GLFW_KEY_MINUS, SCALE_OBJECT_DOWN}
+    {GLFW_KEY_MINUS, SCALE_OBJECT_DOWN},
+    {GLFW_KEY_S, TOGGLE_SPLATS},
+    {GLFW_KEY_W, TOGGLE_WIREFRAME}
   };
   int i = 0;
   std::map<int, int>::iterator itr;
@@ -74,21 +76,13 @@ int View::listenToCallbacks(GLFWwindow *window)
   }
 
   static int oldState12 = GLFW_RELEASE;
-   if (glfwGetKey(window, GLFW_KEY_EQUAL) == GLFW_PRESS && (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS))
-    return SELECT_OBJECT_5;
-
-  static int oldState13 = GLFW_RELEASE;
-  int newState13 = glfwGetKey(window, GLFW_KEY_W);
-   if (oldState13 == GLFW_PRESS && newState13 == GLFW_RELEASE)
+  newState = glfwGetKey(window, GLFW_KEY_EQUAL);
+  if(oldState12 == GLFW_PRESS && newState == GLFW_RELEASE &&  glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
   {
-    GLint polygonMode;
-    glGetIntegerv(GL_POLYGON_MODE, &polygonMode);
-    if ( polygonMode == GL_LINE )
-      glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-    else
-      glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+     oldState12 = newState;
+     return SCALE_OBJECT_UP;
   }
-  oldState13 = newState13;
+  oldState12 = newState;
 
   return 0;
   
