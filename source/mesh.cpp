@@ -112,12 +112,12 @@ void Mesh::computeInCirleVertices()
 {
   std::vector<InCircle>::iterator inCircle;
 
-  int num_segments = 2;
+  int num_segments = 7;
 
   Vertex v;
   for(inCircle = inCircles.begin(); inCircle < inCircles.end(); inCircle++)
   {
-    int k = 7;
+    int k = 1;
     float radius = k * inCircle->radius;
     glm::vec3 v1 = inCircle->center;
     glm::vec3 v2 = v1 + (radius * normalize(glm::vec3(v.normal.z, 0, - v.normal.x)));
