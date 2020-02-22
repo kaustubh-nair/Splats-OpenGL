@@ -9,9 +9,22 @@ Mesh::Mesh(std::string filepath, glm::vec3 position)
   selected = false;
   ID++;
   PlyParser parser;
-  parser.parse(filepath, vertices, indices); 
+  //parser.parse(filepath, vertices, indices); 
   position = position;
-  inCircles = parser.inCircles;
+  //inCircles = parser.inCircles;
+  Vertex v;
+  v.position = glm::vec3(-5.5f, -5.5f, -5.0f);
+  vertices.push_back(v);
+  v.position = glm::vec3(5.5f, -5.5f, -5.0f);
+  vertices.push_back(v);
+  v.position = glm::vec3(5.0f,  5.5f, -5.0f);
+  vertices.push_back(v);
+
+    indices = {
+         0, 1, 3,
+         1, 2, 3
+     };
+    print(indices[3]);
   model = glm::translate(glm::mat4(1.0f), position);
   splatMultipler = 1.0f;
 }
@@ -36,6 +49,7 @@ void Mesh::setupSplats()
 
 void Mesh::setup()
 {
+
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
   glGenBuffers(1, &EBO);
