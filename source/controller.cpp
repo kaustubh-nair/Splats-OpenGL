@@ -22,9 +22,9 @@ void Controller::mainLoop( void )
   Shader lightingShader("source/shaders/lighting_shader.vs", "source/shaders/lighting_shader.fs");
   Shader normalColoringShader("source/shaders/normal_coloring_shader.vs", "source/shaders/normal_coloring_shader.fs");
 
-  glm::mat4 proj = glm::ortho(-(WIDTH / 2.0f), WIDTH / 2.0f,
-        HEIGHT / 2.0f, -(HEIGHT / 2.0f),
-        -10.0f, 10.0f);
+  glm::mat4 proj = glm::ortho(-10.0f,10.0f,
+                              -10.0f,10.0f,
+                              -10.0f, 10.0f);
   glm::mat4 viewMatrix = view.getViewMatrix();
 
   glEnable(GL_DEPTH_TEST);
