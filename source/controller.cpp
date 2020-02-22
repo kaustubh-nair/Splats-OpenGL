@@ -14,16 +14,16 @@ void Controller::mainLoop( void )
   //std::vector<std::string> filepaths = { "data/beethoven.ply" };
   //std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,-1.5f)};
   std::vector<std::string> filepaths = {"data/beethoven.ply", "data/fracttree.ply", "data/teapot.ply" , "data/big_spider.ply"};
-  std::vector<glm::vec3> meshPos = {glm::vec3(1.0f,1.0f,3.0f), glm::vec3(1.0f,1.0f,0.0f), glm::vec3(1.0f,1.0f,0.0f), glm::vec3(0.0f,0.0f,0.0f)};
+  std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,3.0f), glm::vec3(1.0f,1.0f,0.0f), glm::vec3(1.0f,1.0f,0.0f), glm::vec3(0.0f,0.0f,0.0f)};
   model.setup(filepaths, meshPos);
 
   /* setup shaders */
-  Shader shader("source/shaders/shader.vs", "source/shaders/shader.fs");
+  Shader shader("source/shaders/lighting_shader.vs", "source/shaders/lighting_shader.fs");
   Shader lightingShader("source/shaders/lighting_shader.vs", "source/shaders/lighting_shader.fs");
   Shader normalColoringShader("source/shaders/normal_coloring_shader.vs", "source/shaders/normal_coloring_shader.fs");
 
-  glm::mat4 proj = glm::ortho(-10.0f,10.0f,
-                              -10.0f,10.0f,
+  glm::mat4 proj = glm::ortho(-1.0f,1.0f,
+                              -1.0f,1.0f,
                               -10.0f, 10.0f);
   glm::mat4 viewMatrix = view.getViewMatrix();
 
@@ -48,12 +48,12 @@ void Controller::mainLoop( void )
     else
     {
       shader.use();
-      shader.setVec3("objectColor", 0.5f, 0.1f, 0.1f);
+      //shader.setVec3("objectColor", 0.5f, 0.1f, 0.1f);
     }
     shader.setMat4("projection", proj);
     shader.setMat4("view", viewMatrix);
-    shader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
-    shader.setVec3("lightPos",2.5f, 2.5f, 5.0f );
+    //shader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
+    //shader.setVec3("lightPos",2.5f, 2.5f, 5.0f );
 
     model.draw(shader, lightingShader);
 

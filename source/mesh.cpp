@@ -64,7 +64,7 @@ void Mesh::drawSplats(Shader shader)
 
 void Mesh::draw(Shader shader)
 {
-  shader.setMat4("model", model);
+  //shader.setMat4("model", model);
 
   glBindVertexArray(VAO); 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
