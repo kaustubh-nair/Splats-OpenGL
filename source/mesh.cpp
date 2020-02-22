@@ -24,7 +24,6 @@ Mesh::Mesh(std::string filepath, glm::vec3 position)
          0, 1, 3,
          1, 2, 3
      };
-    print(indices[3]);
   model = glm::translate(glm::mat4(1.0f), position);
   splatMultipler = 1.0f;
 }
@@ -78,7 +77,8 @@ void Mesh::drawSplats(Shader shader)
 
 void Mesh::draw(Shader shader)
 {
-  //shader.setMat4("model", model);
+  model = glm::scale(glm::mat4(1.0f), glm::vec3(50.0f,50.f,50.0f));
+  shader.setMat4("model", model);
 
   glBindVertexArray(VAO); 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
