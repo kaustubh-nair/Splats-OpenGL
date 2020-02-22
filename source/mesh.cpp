@@ -9,21 +9,9 @@ Mesh::Mesh(std::string filepath, glm::vec3 position)
   selected = false;
   ID++;
   PlyParser parser;
-  //parser.parse(filepath, vertices, indices); 
+  parser.parse(filepath, vertices, indices); 
   position = position;
-  //inCircles = parser.inCircles;
-  Vertex v;
-  v.position = glm::vec3(-5.5f, -5.5f, -5.0f);
-  vertices.push_back(v);
-  v.position = glm::vec3(5.5f, -5.5f, -5.0f);
-  vertices.push_back(v);
-  v.position = glm::vec3(5.0f,  5.5f, -5.0f);
-  vertices.push_back(v);
-
-    indices = {
-         0, 1, 3,
-         1, 2, 3
-     };
+  inCircles = parser.inCircles;
   model = glm::translate(glm::mat4(1.0f), position);
   splatMultipler = 1.0f;
 }
@@ -59,8 +47,8 @@ void Mesh::setup()
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-  //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3)));
-  //glEnableVertexAttribArray(1);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3)));
+  glEnableVertexAttribArray(1);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 }
@@ -82,6 +70,7 @@ void Mesh::draw(Shader shader)
   shader.setMat4("model", model);
 
   glBindVertexArray(VAO); 
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
   glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 }
 
