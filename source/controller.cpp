@@ -11,10 +11,10 @@ void Controller::mainLoop( void )
   GLFWwindow* window = this->mainWindow;
 
   /* load ply files into model */
-  //std::vector<std::string> filepaths = { "data/beethoven.ply" };
-  //std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,-1.5f)};
-  std::vector<std::string> filepaths = {"data/beethoven.ply", "data/fracttree.ply", "data/teapot.ply" , "data/big_spider.ply"};
-  std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,3.0f), glm::vec3(1.0f,1.0f,0.0f), glm::vec3(1.0f,1.0f,0.0f), glm::vec3(0.0f,0.0f,0.0f)};
+  std::vector<std::string> filepaths = { "data/beethoven.ply" };
+  std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,-1.5f)};
+  //std::vector<std::string> filepaths = {"data/beethoven.ply", "data/fracttree.ply", "data/teapot.ply" , "data/big_spider.ply"};
+  //std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,3.0f), glm::vec3(1.0f,1.0f,0.0f), glm::vec3(1.0f,1.0f,0.0f), glm::vec3(0.0f,0.0f,0.0f)};
   model.setup(filepaths, meshPos);
 
   /* setup shaders */

@@ -59,8 +59,8 @@ void Mesh::setup()
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3)));
-  glEnableVertexAttribArray(1);
+  //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3)));
+  //glEnableVertexAttribArray(1);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 }
@@ -77,11 +77,12 @@ void Mesh::drawSplats(Shader shader)
 
 void Mesh::draw(Shader shader)
 {
-  model = glm::scale(glm::mat4(1.0f), glm::vec3(50.0f,50.f,50.0f));
+  //model = glm::scale(glm::mat4(1.0f), glm::vec3(50.0f,50.f,50.0f));
+  model = glm::mat4(1.0f);
   shader.setMat4("model", model);
 
   glBindVertexArray(VAO); 
-  glDrawElements(GL_TRIANGLES, 0, vertices.size());
+  glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 }
 
 

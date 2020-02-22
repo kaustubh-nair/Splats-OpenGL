@@ -35,7 +35,6 @@ void Model::refresh()
   }
 }
 
-
 void Model::draw(Shader shader, Shader lightingShader)
 {
   std::vector<Mesh>::iterator mesh;
@@ -48,9 +47,10 @@ void Model::draw(Shader shader, Shader lightingShader)
     else
       mesh->draw(shader);
       */
+      mesh->draw(shader);
   }
   Lighting lighting;
-  lighting.draw(lightingShader);
+  //lighting.draw(lightingShader);
 }
 
 
