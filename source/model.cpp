@@ -42,10 +42,12 @@ void Model::draw(Shader shader, Shader lightingShader)
 
   for (mesh = meshes.begin(); mesh < meshes.end(); mesh++)
   {
+    /*
     if(this->renderSplats)
       mesh->drawSplats(shader);
     else
       mesh->draw(shader);
+      */
   }
   Lighting lighting;
   lighting.draw(lightingShader);
