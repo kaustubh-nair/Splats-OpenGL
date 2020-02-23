@@ -128,7 +128,7 @@ class PlyParser
       compute_incircle(vertices, indices);
     }
 
-    /* scale vertices to [-1,1] */
+    /* scale vertices to [-0.5,0.5] */
     void normalize_vertices(std::vector<Vertex> &vertices, float min, float max)
     {
       std::vector<Vertex>::iterator vertex;

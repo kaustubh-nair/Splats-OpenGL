@@ -60,7 +60,7 @@ void Mesh::drawSplats(Shader shader)
   shader.setMat4("model", model);
   shader.setVec3("objectColor", 0.5f, 0.1f, 0.1f);
   if(selected)
-    shader.setVec3("objectColor", 0.1f, 0.1f, 0.5f);
+    shader.setVec3("objectColor", 0.3f, 0.6f, 0.3f);
 
   glBindVertexArray(VAO); 
   glDrawArrays(GL_TRIANGLES, 0, inCircleVertices.size());
@@ -72,7 +72,7 @@ void Mesh::draw(Shader shader)
   shader.setMat4("model", model);
   shader.setVec3("objectColor", 0.5f, 0.1f, 0.1f);
   if(selected)
-    shader.setVec3("objectColor", 0.1f, 0.1f, 0.5f);
+    shader.setVec3("objectColor", 0.3f, 0.6f, 0.3f);
 
   glBindVertexArray(VAO); 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -118,10 +118,15 @@ void Mesh::computeInCirleVertices()
 
 void Mesh::rotate(Trackball trackball, glm::vec2 direction)
 {
-  static float rotation_transform[4][4] ;
-  trackball.rotationMatrix( rotation_transform ) ;
-  glm::mat4 matrix = glm::make_mat4(&rotation_transform[0][0]);
-  model = model * matrix;
+  glm::vec3 dir= glm::vec3(0.001f * direction, 0.0f);
+  float angle = 4.0f;
+  float x = dir.x * sin(angle/2);
+  float y = dir.y * sin(angle/2);
+  float z = dir.z * sin(angle/2);
+  float w = cos(angle/2);
+  glm::quat q = glm::quat(x,y,z,y);
+  glm::mat4 matrix = glm::mat4_cast(q);
+  model = matrix * model;
 }
 
 void Mesh::translate(glm::vec2 direction)
