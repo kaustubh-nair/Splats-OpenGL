@@ -21,6 +21,7 @@ void Model::setup(std::vector<std::string> filepaths, std::vector<glm::vec3> mes
 
 }
 
+/* refresh while rendering splats */
 void Model::refresh()
 {
   std::vector<Mesh>::iterator mesh;
@@ -31,7 +32,6 @@ void Model::refresh()
       mesh->setupSplats();
     else
       mesh->setup();
-
   }
 }
 
@@ -47,7 +47,7 @@ void Model::draw(Shader shader, Shader lightingShader)
       mesh->draw(shader);
   }
   Lighting lighting;
-  //lighting.draw(lightingShader);
+  lighting.draw(lightingShader);
 }
 
 
@@ -98,11 +98,11 @@ void Model::scale(int direction)
   meshes[this->selectedMesh - 1].scale(direction);
 }
 
-void Model::rotate(Trackball trackball, glm::vec2 direction)
+void Model::rotate(glm::vec2 direction)
 {
   if(this->selectedMesh == -1)
     return;
-  meshes[this->selectedMesh - 1].rotate(trackball, direction);
+  meshes[this->selectedMesh - 1].rotate(direction);
 
 }
 
@@ -114,7 +114,7 @@ void Model::changeSplatRadius(int direction)
 }
 
 
-//object selection code
+/*object selection code*/
 /*
 void Model::selectObject(glm::vec3 position)
 {

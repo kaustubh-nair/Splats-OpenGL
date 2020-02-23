@@ -9,11 +9,11 @@
 #include "../include/vertex.h"
 #include "../include/in_circle.h"
 #include "../include/shader.h"
-#include "../include/fast_trackball.h"
 
 
 
 extern int ID;
+extern int num_segments;
 
 class Mesh {
   public:
@@ -22,8 +22,10 @@ class Mesh {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
 
+    /* splat related info */
     std::vector<InCircle> inCircles;
     std::vector<Vertex> inCircleVertices;
+    std::vector<GLuint> fanStartingElements;
 
     Mesh(std::string filepath, glm::vec3 position);
     void setup();
@@ -36,8 +38,10 @@ class Mesh {
     glm::mat4 rotationMatrix;
     void scale(int direction);
     void translate(glm::vec2 direction);
-    void rotate(Trackball trackball, glm::vec2 direction);
+    void rotate(glm::vec2 direction);
     void changeSplatRadius(int direction);
+    void addToInCircles(glm::vec3 normal, glm::vec3 vertex, bool center);
+
 
   private:
     unsigned int VAO, VBO, EBO;

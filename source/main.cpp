@@ -5,7 +5,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "../include/definitions.h"
 
-
 int main()
 {
   Controller *controller = new Controller();

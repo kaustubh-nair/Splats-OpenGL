@@ -5,7 +5,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 Camera camera;
 float WIDTH = 800.0f;
 float HEIGHT = 600.0f;
-bool firstMouse;
+bool firstMouse;  //first mouse click
 
 GLFWwindow* View::initialize_window()
 {
@@ -14,7 +14,7 @@ GLFWwindow* View::initialize_window()
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "yolo", NULL, NULL);
+  GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "window", NULL, NULL);
   if (window == NULL)
   {
     std::cout << "Failed to create GLFW window" << std::endl;
@@ -78,6 +78,7 @@ int View::listenToCallbacks(GLFWwindow *window)
     i++;
   }
 
+  /* scaling up */
   static int oldState12 = GLFW_RELEASE;
   newState = glfwGetKey(window, GLFW_KEY_EQUAL);
   if(oldState12 == GLFW_PRESS && newState == GLFW_RELEASE &&  glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
@@ -125,49 +126,28 @@ int View::listenToCallbacks(GLFWwindow *window)
   if(leftState == GLFW_RELEASE && rightState == GLFW_RELEASE)
     glfwGetCursorPos(window, &oldX, &oldY);
 
-  if(rightState == GLFW_RELEASE)
-    trackball.rotate(0,0,0,0);
+  if(leftState == GLFW_PRESS || rightState == GLFW_PRESS)
+  {
+    double x, y;
+    glfwGetCursorPos(window, &x, &y);
+
+    if(firstMouse)
+    {
+      oldX = x;
+      oldY = y;
+      firstMouse = false;
+    }
+
+    this->direction = glm::vec2(x - oldX, oldY - y);
+    oldX = x;
+    oldY = y;
+  }
 
   if(leftState == GLFW_PRESS)
-  {
-    double x, y;
-    glfwGetCursorPos(window, &x, &y);
-
-    if(firstMouse)
-    {
-      oldX = x;
-      oldY = y;
-      firstMouse = false;
-    }
-
-    direction = glm::vec2(x - oldX, oldY - y);
-    oldX = x;
-    oldY = y;
     return TRANSLATE_OBJECT;
-  }
-
 
   if(rightState == GLFW_PRESS)
-  {
-    double x, y;
-    glfwGetCursorPos(window, &x, &y);
-
-    if(firstMouse)
-    {
-      oldX = x;
-      oldY = y;
-      firstMouse = false;
-    }
-
-    trackball.rotate((2.0 * oldX - WIDTH) / float(WIDTH),
-    (HEIGHT - 2.0 * oldY) / float(HEIGHT),
-    (2.0 * x - WIDTH) / float(WIDTH),
-    (HEIGHT - 2.0 * y) / float(HEIGHT));
-    direction = glm::vec2(x - oldX, oldY - y);
-    oldX = x;
-    oldY = y;
     return ROTATE_OBJECT;
-  }
 
 }
 

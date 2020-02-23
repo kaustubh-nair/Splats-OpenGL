@@ -14,11 +14,13 @@
 #include "../include/definitions.h"
 #include "../include/vertex.h"
 #include "../include/in_circle.h"
+#include "../include/in_ellipse.h"
 
 class PlyParser
 {
   public:
     std::vector<InCircle> inCircles;
+    std::vector<InCircle> inEllipses;
 
     // store vertices and indices
     void parse(std::string filepath, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices)
@@ -126,7 +128,9 @@ class PlyParser
       normalize_vertices(vertices, min, max);
       compute_vertex_normals(vertices);
       compute_incircle(vertices, indices);
+      //compute_inellipses(vertices, indices);
     }
+
 
     /* scale vertices to [-0.5,0.5] */
     void normalize_vertices(std::vector<Vertex> &vertices, float min, float max)
@@ -165,6 +169,22 @@ class PlyParser
     }
 
 
+    void compute_inellipses(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
+    {
+      for(int i = 0; i < indices.size(); i+=3)
+      {
+        Vertex a = vertices[indices[i]];
+        Vertex b = vertices[indices[i+1]];
+        Vertex c = vertices[indices[i+2]];
+        /*float x = (a.x + b.x + c.x)/3.0f;
+        float y = (a.y + b.y + c.y)/3.0f;
+        float z = (a.z + b.z + c.z)/3.0f;
+        glm::vec3 centroid = glm::vec3(x,y,z);
+        InEllipse inellipse;
+        inellipse.centroid = centroid;
+        inEllipses.push_back(inellipse);*/
+      }
+    }
     void compute_incircle(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
     {
       for(int i = 0; i < indices.size(); i+=3)

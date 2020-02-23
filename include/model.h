@@ -5,25 +5,26 @@
 
 #include "../include/mesh.h"
 #include "../include/lighting.h"
-#include "../include/fast_trackball.h"
 
 class Model
 {
   public:
+    bool renderSplats;
+
     Model();
-    void draw_lighting( Shader shader);
-    void draw(Shader shader, Shader lightingShader);
     void setup(std::vector<std::string> filepaths, std::vector<glm::vec3> locations);
+    void draw(Shader shader, Shader lightingShader);
     void refresh();
+    void changeSplatRadius(int direction);
 
     void unselect();
     void select(int direction);
+
     void translate(glm::vec2 direction);
     void scale(int direction);
-    void rotate(Trackball trackball, glm::vec2 direction);
-    void changeSplatRadius(int direction);
+    void rotate(glm::vec2 direction);
 
-    bool renderSplats;
+    void drawLighting( Shader shader);
   private:
     std::vector<Mesh> meshes;
     int selectedMesh;

@@ -11,10 +11,8 @@ void Controller::mainLoop( void )
   GLFWwindow* window = this->mainWindow;
 
   /* load ply files into model */
-  //std::vector<std::string> filepaths = { "data/beethoven.ply" };
-  //std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,0.0f)};
   std::vector<std::string> filepaths = {"data/beethoven.ply", "data/fracttree.ply", "data/teapot.ply" , "data/big_spider.ply"};
-  std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,-3.0f), glm::vec3(-200.0f,-200.0f,0.0f), glm::vec3(200.0f,-200.0f,0.0f), glm::vec3(200.0f,200.0f,0.0f)};
+  std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,-30.0f), glm::vec3(-200.0f,-200.0f,0.0f), glm::vec3(200.0f,-200.0f,0.0f), glm::vec3(200.0f,200.0f,0.0f)};
   model.setup(filepaths, meshPos);
 
   /* setup shaders */
@@ -22,9 +20,7 @@ void Controller::mainLoop( void )
   Shader lightingShader("source/shaders/lighting_shader.vs", "source/shaders/lighting_shader.fs");
   Shader normalColoringShader("source/shaders/normal_coloring_shader.vs", "source/shaders/normal_coloring_shader.fs");
 
-   glm::mat4 proj = glm::ortho(-(WIDTH / 2.0f), WIDTH / 2.0f,
-                               -(HEIGHT / 2.0f),HEIGHT / 2.0f,
-                               -100.0f, 100.0f);
+  glm::mat4 proj = glm::ortho(-(WIDTH / 2.0f), WIDTH / 2.0f, -(HEIGHT / 2.0f),HEIGHT / 2.0f, -100.0f, 100.0f);
   glm::mat4 viewMatrix = view.getViewMatrix();
 
   glEnable(GL_DEPTH_TEST);
@@ -46,9 +42,8 @@ void Controller::mainLoop( void )
     if(this->normalColoring)
       normalColoringShader.use();
     else
-    {
       shader.use();
-    }
+
     shader.setMat4("projection", proj);
     shader.setMat4("view", viewMatrix);
     shader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
@@ -112,7 +107,7 @@ void Controller::reactToCallback(int ret)
         model.translate(view.direction);
         break;
     case ROTATE_OBJECT:
-        model.rotate(view.trackball, view.direction);
+        model.rotate(view.direction);
         break;
   }
 }

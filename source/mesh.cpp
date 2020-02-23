@@ -2,6 +2,7 @@
 #include<cmath>
 
 int ID = 1;
+int num_segments = 10;
 
 Mesh::Mesh(std::string filepath, glm::vec3 position)
 {
@@ -65,9 +66,15 @@ void Mesh::drawSplats(Shader shader)
     shader.setVec3("objectColor", 0.3f, 0.6f, 0.3f);
 
   glBindVertexArray(VAO); 
-  glDrawArrays(GL_TRIANGLES, 0, inCircleVertices.size());
-}
 
+  GLint startingElements[fanStartingElements.size()];
+  GLint counts[inCircles.size()];
+  for(int i=0;i<inCircles.size();i++){counts[i]=num_segments+2;}
+
+  std::copy(fanStartingElements.begin(), fanStartingElements.end(), startingElements);
+
+  glMultiDrawArrays(GL_TRIANGLE_FAN, startingElements, counts, inCircles.size()); // 2 fans
+}
 
 void Mesh::draw(Shader shader)
 {
@@ -83,47 +90,57 @@ void Mesh::draw(Shader shader)
 }
 
 
+int indexCount;
 void Mesh::computeInCirleVertices()
 {
-  inCircleVertices.clear();
+  indexCount = 0;
   std::vector<InCircle>::iterator inCircle;
-  int num_segments = 10;
-  Vertex v;
+  float radius;
+  inCircleVertices.clear();
+
   for(inCircle = inCircles.begin(); inCircle < inCircles.end(); inCircle++)
   {
-    float k = this->splatMultipler;
-    float radius = k * inCircle->radius;
-    glm::vec3 v1 = inCircle->center;
-    glm::vec3 v2 = v1 + (radius * normalize(glm::vec3(v.normal.z, 0, - v.normal.x)));
-    v.normal = inCircle->normal;
+    radius = this->splatMultipler * inCircle->radius;  
+    glm::vec3 normal = inCircle->normal;
+    glm::vec3 circlePlane;
+    glm::vec3 center = inCircle->center;
 
-    v.position = v2;
-    inCircleVertices.push_back(v);
+    addToInCircles(normal, center, true);
+
+    circlePlane = glm::vec3(normal.z, 0.0f, -normal.x);
+    if(circlePlane == glm::vec3(0.0f,0.0f,0.0f))
+      circlePlane = glm::vec3(0, normal.z, -normal.y);
+
+    glm::vec3 circleVertex = center + (radius * normalize(circlePlane));
+    addToInCircles(normal, circleVertex, false);
 
     float angle = 360.0f/num_segments;
     for(int i = 1; i < num_segments; i++)
     {
-      glm::mat4 rotationMat = glm::rotate(glm::mat4(1.0f), glm::radians(angle*i), glm::normalize(inCircle->normal));
-      glm::vec3 v3 = glm::vec3(rotationMat * glm::vec4(v2-v1,1.0f)) + v1;
+      glm::mat4 rotationMat = glm::rotate(glm::mat4(1.0f), glm::radians(i*angle), normal);
 
-      v.position = v1;
-      inCircleVertices.push_back(v);
-      v.position = v3;
-      inCircleVertices.push_back(v);
-      inCircleVertices.push_back(v);
+      glm::vec3 a = glm::vec3(rotationMat * glm::vec4(circleVertex-center,1.0f)) + center;
+      addToInCircles(normal, a, false);
     }
-    v.position = v1;
-    inCircleVertices.push_back(v);
-    v.position = v2;
-    inCircleVertices.push_back(v);
+    addToInCircles(normal,circleVertex,false);
   }
 }
 
-void Mesh::rotate(Trackball trackball, glm::vec2 direction)
+void Mesh::addToInCircles(glm::vec3 normal, glm::vec3 vertex, bool center)
 {
-  float x, y, z;
-  glm::vec3 dir = glm::vec3(x, y, z);
-  float angle = glm::radians(45.0f);
+  if(center)
+    this->fanStartingElements.push_back(indexCount);
+  Vertex x;
+  x.normal = normal;
+  x.position = vertex;
+  inCircleVertices.push_back(x);
+  indexCount++;
+}
+
+void Mesh::rotate(glm::vec2 direction)
+{
+  glm::vec3 dir = glm::normalize(glm::vec3(direction,1.0f));
+  float angle = glm::radians(5.0f);
   float x = dir.x * sin(angle/2);
   float y = dir.y * sin(angle/2);
   float z = dir.z * sin(angle/2);
@@ -135,7 +152,7 @@ void Mesh::rotate(Trackball trackball, glm::vec2 direction)
 
 void Mesh::translate(glm::vec2 direction)
 {
-  translationMatrix = glm::translate(translationMatrix, glm::vec3(direction.x, direction.y, 0.0f));
+  translationMatrix = glm::translate(translationMatrix, glm::vec3(0.7f * direction.x, direction.y, 0.0f));
 }
 
 void Mesh::scale(int direction)
@@ -160,4 +177,3 @@ void Mesh::changeSplatRadius(int direction)
     this->setupSplats();
   }
 }
-
