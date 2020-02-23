@@ -13,6 +13,8 @@
 
 #define TRANSLATE_OBJECT 7
 
+#define OBJECT_SELECTED 8
+
 #define RIGHT 11
 #define LEFT 12
 #define DOWN 13

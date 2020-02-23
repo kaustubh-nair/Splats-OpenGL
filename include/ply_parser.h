@@ -192,7 +192,7 @@ class PlyParser
         InCircle incircle;
         incircle.center = incenter;
         incircle.radius = inRadius;
-        incircle.normal = glm::normalize(normal);
+        incircle.normal = normal;
 
         inCircles.push_back(incircle);
       }

@@ -87,6 +87,36 @@ int View::listenToCallbacks(GLFWwindow *window)
   }
   oldState12 = newState;
   
+  /* object picking */
+  /*
+  static int oldState13 = GLFW_RELEASE;
+  newState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+  if( oldState13 == GLFW_PRESS && newState == GLFW_RELEASE)
+  {
+    oldState13 = newState;
+    double xpos, ypos;
+    glfwGetCursorPos(window, &xpos, &ypos);
+    float x = xpos / (WIDTH * 0.5f) ;
+    float y = ypos / (HEIGHT * 0.5f) ;
+
+    glm::vec4 ray = glm::vec4(x,-y,0.0f,1.0f);
+
+    glm::mat4 proj = glm::ortho(-(WIDTH / 2.0f), WIDTH / 2.0f,
+                               -(HEIGHT / 2.0f),HEIGHT / 2.0f,
+                               -100.0f, 100.0f);
+    glm::mat4 view = camera.getViewMatrix();
+    glm::mat4 worldInv = glm::inverse(proj * view);
+    glm::vec4 worldPos = worldInv * ray;
+
+    objPosition = glm::vec3(worldPos.x, worldPos.y, 0.0f);
+    //objPosition = glm::normalize(objPosition);
+    print(objPosition.x);
+    print(objPosition.y);
+    return OBJECT_SELECTED;
+  }
+  oldState13 = newState;
+  */
+
   /* translation and rotation callbacks */
   int leftState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
   int rightState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
@@ -139,41 +169,9 @@ int View::listenToCallbacks(GLFWwindow *window)
     return ROTATE_OBJECT;
   }
 
-  /*
-  static int oldState13 = GLFW_RELEASE;
-  newState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-  if( oldState13 == GLFW_PRESS && newState == GLFW_RELEASE)
-  {
-    oldState13 = newState;
-    double xpos, ypos;
-    glfwGetCursorPos(window, &xpos, &ypos);
-    float x = xpos / (WIDTH * 0.5f) ;
-    float y = ypos / (HEIGHT * 0.5f) ;
-
-    glm::vec4 ray = glm::vec4(x,-y,0.0f,1.0f);
-
-    glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);  
-    glm::mat4 view = camera.getViewMatrix();
-    glm::mat4 world = glm::inverse(proj * view);
-    glm::vec4 worldPos = world * ray;
-    //worldPos /= worldPos.w;
-
-    objPosition = glm::vec3(worldPos.x, worldPos.y, 0.0f);
-    //objPosition = glm::normalize(objPosition);
-    //print(objPosition.x);
-    //print(objPosition.y);
-    //return OBJECT_SELECTED;
-    return 0;
-  }
-  oldState13 = newState;
-  */
-}
-
-glm::vec2 View::listenToMouseCallbacks(GLFWwindow *window)
-{
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    glViewport(0, 0, width, height);
+    glViewport(0,0,width,height);
 }

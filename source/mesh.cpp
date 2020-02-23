@@ -12,8 +12,9 @@ Mesh::Mesh(std::string filepath, glm::vec3 position)
   parser.parse(filepath, vertices, indices); 
   position = position;
   inCircles = parser.inCircles;
-  model = glm::translate(glm::mat4(1.0f), position);
-  model = glm::scale(model, glm::vec3(275.0f,275.0f,275.0f));
+  translationMatrix = glm::translate(glm::mat4(1.0f), position);
+  scalingMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(275.0f,275.0f,275.0f));
+  rotationMatrix = glm::mat4(1.0f);
   splatMultipler = 1.0f;
 }
 
@@ -57,6 +58,7 @@ void Mesh::setup()
 
 void Mesh::drawSplats(Shader shader)
 {
+  glm::mat4 model = translationMatrix * rotationMatrix * scalingMatrix;
   shader.setMat4("model", model);
   shader.setVec3("objectColor", 0.5f, 0.1f, 0.1f);
   if(selected)
@@ -69,6 +71,7 @@ void Mesh::drawSplats(Shader shader)
 
 void Mesh::draw(Shader shader)
 {
+  glm::mat4 model = translationMatrix * rotationMatrix * scalingMatrix;
   shader.setMat4("model", model);
   shader.setVec3("objectColor", 0.5f, 0.1f, 0.1f);
   if(selected)
@@ -118,28 +121,29 @@ void Mesh::computeInCirleVertices()
 
 void Mesh::rotate(Trackball trackball, glm::vec2 direction)
 {
-  glm::vec3 dir= glm::vec3(0.001f * direction, 0.0f);
-  float angle = 4.0f;
+  float x, y, z;
+  glm::vec3 dir = glm::vec3(x, y, z);
+  float angle = glm::radians(45.0f);
   float x = dir.x * sin(angle/2);
   float y = dir.y * sin(angle/2);
   float z = dir.z * sin(angle/2);
   float w = cos(angle/2);
-  glm::quat q = glm::quat(x,y,z,y);
+  glm::quat q = glm::quat(w,x,y,z);
   glm::mat4 matrix = glm::mat4_cast(q);
-  model = matrix * model;
+  rotationMatrix = matrix * rotationMatrix;
 }
 
 void Mesh::translate(glm::vec2 direction)
 {
-  model = glm::translate(model, glm::vec3(direction.x  * 0.0015, direction.y * 0.002, 0.0f));
+  translationMatrix = glm::translate(translationMatrix, glm::vec3(direction.x, direction.y, 0.0f));
 }
 
 void Mesh::scale(int direction)
 {
   if(direction == UP)
-    model = glm::scale(model, glm::vec3(1.1,1.1,1.1));
+    scalingMatrix = glm::scale(scalingMatrix, glm::vec3(1.1,1.1,1.1));
   else if(direction == DOWN)
-    model = glm::scale(model, glm::vec3(0.9,0.9,0.9));
+    scalingMatrix = glm::scale(scalingMatrix, glm::vec3(0.9,0.9,0.9));
 }
 
 

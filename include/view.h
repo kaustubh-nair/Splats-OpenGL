@@ -26,7 +26,6 @@ class View {
     Trackball trackball;      //trackball for rotation
     GLFWwindow* initialize_window();
     int listenToCallbacks(GLFWwindow *window);
-    glm::vec2 listenToMouseCallbacks(GLFWwindow *window);
     glm::mat4 getViewMatrix();
   private:
 };

@@ -31,7 +31,9 @@ class Mesh {
     void setupSplats();
     void drawSplats(Shader shader);
     void computeInCirleVertices();
-    glm::mat4 model;
+    glm::mat4 translationMatrix;
+    glm::mat4 scalingMatrix;
+    glm::mat4 rotationMatrix;
     void scale(int direction);
     void translate(glm::vec2 direction);
     void rotate(Trackball trackball, glm::vec2 direction);

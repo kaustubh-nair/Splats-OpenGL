@@ -35,7 +35,6 @@ void Controller::mainLoop( void )
   {
 
     int ret = view.listenToCallbacks(window);
-    glm::vec2 dir = view.listenToMouseCallbacks(window);
 
     reactToCallback(ret);
 
