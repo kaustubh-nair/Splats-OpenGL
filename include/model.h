@@ -5,6 +5,7 @@
 
 #include "../include/mesh.h"
 #include "../include/lighting.h"
+#include "../include/fast_trackball.h"
 
 class Model
 {
@@ -17,9 +18,9 @@ class Model
 
     void unselect();
     void select(int direction);
-    void translate(int direction);
+    void translate(glm::vec2 direction);
     void scale(int direction);
-    void rotate(int direction);
+    void rotate(Trackball trackball, glm::vec2 direction);
     void changeSplatRadius(int direction);
 
     bool renderSplats;

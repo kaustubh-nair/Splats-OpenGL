@@ -13,6 +13,7 @@ Mesh::Mesh(std::string filepath, glm::vec3 position)
   position = position;
   inCircles = parser.inCircles;
   model = glm::translate(glm::mat4(1.0f), position);
+  model = glm::scale(model, glm::vec3(275.0f,275.0f,275.0f));
   splatMultipler = 1.0f;
 }
 
@@ -57,6 +58,9 @@ void Mesh::setup()
 void Mesh::drawSplats(Shader shader)
 {
   shader.setMat4("model", model);
+  shader.setVec3("objectColor", 0.5f, 0.1f, 0.1f);
+  if(selected)
+    shader.setVec3("objectColor", 0.1f, 0.1f, 0.5f);
 
   glBindVertexArray(VAO); 
   glDrawArrays(GL_TRIANGLES, 0, inCircleVertices.size());
@@ -65,13 +69,14 @@ void Mesh::drawSplats(Shader shader)
 
 void Mesh::draw(Shader shader)
 {
-  //model = glm::scale(glm::mat4(1.0f), glm::vec3(50.0f,50.f,50.0f));
-  model = glm::mat4(1.0f);
   shader.setMat4("model", model);
+  shader.setVec3("objectColor", 0.5f, 0.1f, 0.1f);
+  if(selected)
+    shader.setVec3("objectColor", 0.1f, 0.1f, 0.5f);
 
   glBindVertexArray(VAO); 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-  glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+  glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 }
 
 
@@ -111,27 +116,18 @@ void Mesh::computeInCirleVertices()
   }
 }
 
-void Mesh::translate(int direction)
+void Mesh::rotate(Trackball trackball, glm::vec2 direction)
 {
-  if(direction == UP)
-    model = glm::translate(model, glm::vec3(0.0f, 0.2f,0.0f));
-  else if(direction == DOWN)
-    model = glm::translate(model, glm::vec3(0.0f, -0.2f,0.0f));
-  else if(direction == RIGHT)
-    model = glm::translate(model, glm::vec3(0.2f, 0.0f,0.0f));
-  else if(direction == LEFT)
-    model = glm::translate(model, glm::vec3(-0.2f, 0.0f,0.0f));
+  static float rotation_transform[4][4] ;
+  trackball.rotationMatrix( rotation_transform ) ;
+  glm::mat4 matrix = glm::make_mat4(&rotation_transform[0][0]);
+  model = model * matrix;
 }
 
-
-void Mesh::rotate(int direction)
+void Mesh::translate(glm::vec2 direction)
 {
-  if(direction == CLOCKWISE)
-    model = glm::scale(model, glm::vec3(1.1,1.1,1.1));
-  else if(direction == ANTICLOCKWISE)
-    model = glm::scale(model, glm::vec3(0.9,0.9,0.9));
+  model = glm::translate(model, glm::vec3(direction.x  * 0.0015, direction.y * 0.002, 0.0f));
 }
-
 
 void Mesh::scale(int direction)
 {

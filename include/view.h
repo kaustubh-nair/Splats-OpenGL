@@ -13,7 +13,7 @@
 
 #include "../include/camera.h"
 #include "../include/definitions.h"
-
+#include "../include/fast_trackball.h"
 
 extern Camera camera;
 extern float WIDTH;
@@ -21,9 +21,12 @@ extern float HEIGHT;
 
 class View {
   public:
-    glm::vec3 objPosition;  //temporary variable to store selected object position
+    glm::vec3 objPosition;      //temporary variable to store selected object position
+    glm::vec2 direction;      //helper variable to store translation direction
+    Trackball trackball;      //trackball for rotation
     GLFWwindow* initialize_window();
     int listenToCallbacks(GLFWwindow *window);
+    glm::vec2 listenToMouseCallbacks(GLFWwindow *window);
     glm::mat4 getViewMatrix();
   private:
 };

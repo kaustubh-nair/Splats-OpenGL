@@ -9,6 +9,8 @@
 #include "../include/vertex.h"
 #include "../include/in_circle.h"
 #include "../include/shader.h"
+#include "../include/fast_trackball.h"
+
 
 
 extern int ID;
@@ -31,8 +33,8 @@ class Mesh {
     void computeInCirleVertices();
     glm::mat4 model;
     void scale(int direction);
-    void translate(int direction);
-    void rotate(int direction);
+    void translate(glm::vec2 direction);
+    void rotate(Trackball trackball, glm::vec2 direction);
     void changeSplatRadius(int direction);
 
   private:

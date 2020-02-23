@@ -5,6 +5,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 Camera camera;
 float WIDTH = 800.0f;
 float HEIGHT = 600.0f;
+bool firstMouse;
 
 GLFWwindow* View::initialize_window()
 {
@@ -51,10 +52,6 @@ int View::listenToCallbacks(GLFWwindow *window)
     {GLFW_KEY_3, SELECT_OBJECT_3},
     {GLFW_KEY_4, SELECT_OBJECT_4},
     {GLFW_KEY_5, SELECT_OBJECT_5},
-    {GLFW_KEY_RIGHT, TRANSLATE_OBJECT_RIGHT},
-    {GLFW_KEY_LEFT, TRANSLATE_OBJECT_LEFT},
-    {GLFW_KEY_UP, TRANSLATE_OBJECT_UP},
-    {GLFW_KEY_DOWN, TRANSLATE_OBJECT_DOWN},
     {GLFW_KEY_MINUS, SCALE_OBJECT_DOWN},
     {GLFW_KEY_S, TOGGLE_SPLATS},
     {GLFW_KEY_W, TOGGLE_WIREFRAME},
@@ -89,12 +86,65 @@ int View::listenToCallbacks(GLFWwindow *window)
      return SCALE_OBJECT_UP;
   }
   oldState12 = newState;
-
-  return 0;
   
-  /*
-  if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+  /* translation and rotation callbacks */
+  int leftState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+  int rightState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+  static double oldX, oldY;
+
+  if(leftState == GLFW_RELEASE && rightState == GLFW_RELEASE)
+    glfwGetCursorPos(window, &oldX, &oldY);
+
+  if(rightState == GLFW_RELEASE)
+    trackball.rotate(0,0,0,0);
+
+  if(leftState == GLFW_PRESS)
   {
+    double x, y;
+    glfwGetCursorPos(window, &x, &y);
+
+    if(firstMouse)
+    {
+      oldX = x;
+      oldY = y;
+      firstMouse = false;
+    }
+
+    direction = glm::vec2(x - oldX, oldY - y);
+    oldX = x;
+    oldY = y;
+    return TRANSLATE_OBJECT;
+  }
+
+
+  if(rightState == GLFW_PRESS)
+  {
+    double x, y;
+    glfwGetCursorPos(window, &x, &y);
+
+    if(firstMouse)
+    {
+      oldX = x;
+      oldY = y;
+      firstMouse = false;
+    }
+
+    trackball.rotate((2.0 * oldX - WIDTH) / float(WIDTH),
+    (HEIGHT - 2.0 * oldY) / float(HEIGHT),
+    (2.0 * x - WIDTH) / float(WIDTH),
+    (HEIGHT - 2.0 * y) / float(HEIGHT));
+    direction = glm::vec2(x - oldX, oldY - y);
+    oldX = x;
+    oldY = y;
+    return ROTATE_OBJECT;
+  }
+
+  /*
+  static int oldState13 = GLFW_RELEASE;
+  newState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+  if( oldState13 == GLFW_PRESS && newState == GLFW_RELEASE)
+  {
+    oldState13 = newState;
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
     float x = xpos / (WIDTH * 0.5f) ;
@@ -110,15 +160,20 @@ int View::listenToCallbacks(GLFWwindow *window)
 
     objPosition = glm::vec3(worldPos.x, worldPos.y, 0.0f);
     //objPosition = glm::normalize(objPosition);
-    print(objPosition.x);
-    print(objPosition.y);
-    return OBJECT_SELECTED;
-  }*/
+    //print(objPosition.x);
+    //print(objPosition.y);
+    //return OBJECT_SELECTED;
+    return 0;
+  }
+  oldState13 = newState;
+  */
+}
+
+glm::vec2 View::listenToMouseCallbacks(GLFWwindow *window)
+{
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
-
-

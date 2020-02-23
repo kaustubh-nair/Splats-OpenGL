@@ -83,13 +83,12 @@ void Model::select(int id)
   }
 }
 
-void Model::translate(int direction)
+void Model::translate(glm::vec2 direction)
 {
   if(this->selectedMesh == -1)
     return;
   meshes[this->selectedMesh - 1].translate(direction);
 }
-
 
 void Model::scale(int direction)
 {
@@ -99,12 +98,11 @@ void Model::scale(int direction)
   meshes[this->selectedMesh - 1].scale(direction);
 }
 
-
-void Model::rotate(int direction)
+void Model::rotate(Trackball trackball, glm::vec2 direction)
 {
   if(this->selectedMesh == -1)
     return;
-  meshes[this->selectedMesh - 1].rotate(direction);
+  meshes[this->selectedMesh - 1].rotate(trackball, direction);
 
 }
 
