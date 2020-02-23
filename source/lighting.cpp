@@ -4,7 +4,7 @@
 
 void Lighting::setup()
 {
-  float vertices[] = { 0.0f, 0.0f, 0.0f};
+  float vertices[] = { 0.5f, 1.5f, 1.0f};
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
 
@@ -19,7 +19,7 @@ void Lighting::setup()
 
 void Lighting::draw(Shader shader)
 {
-  glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+  glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3( 2.5f, 2.5f, 5.0f ));
   shader.setMat4("model", model);
 
   // render the cube

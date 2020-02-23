@@ -12,9 +12,9 @@ void Controller::mainLoop( void )
 
   /* load ply files into model */
   //std::vector<std::string> filepaths = { "data/beethoven.ply" };
-  //std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,-1.5f)};
-  std::vector<std::string> filepaths = {"data/beethoven.ply", "data/shark.ply", "data/apple.ply" , "data/big_spider.ply"};
-  std::vector<glm::vec3> meshPos = {glm::vec3(0.01f,0.0f,0.0f), glm::vec3(2.5f,0.0f,0.0f), glm::vec3(-2.5f,-2.5f,0.0f), glm::vec3(-2.5f,0.0f,0.0f)};
+  //std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,0.0f)};
+  std::vector<std::string> filepaths = {"data/beethoven.ply", "data/fracttree.ply", "data/teapot.ply" , "data/big_spider.ply"};
+  std::vector<glm::vec3> meshPos = {glm::vec3(0.0f,0.0f,3.0f), glm::vec3(-200.0f,-200.0f,0.0f), glm::vec3(200.0f,-200.0f,0.0f), glm::vec3(200.0f,200.0f,0.0f)};
   model.setup(filepaths, meshPos);
 
   /* setup shaders */
@@ -22,7 +22,9 @@ void Controller::mainLoop( void )
   Shader lightingShader("source/shaders/lighting_shader.vs", "source/shaders/lighting_shader.fs");
   Shader normalColoringShader("source/shaders/normal_coloring_shader.vs", "source/shaders/normal_coloring_shader.fs");
 
-  glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);  //if changing this, change in mouse callback too
+   glm::mat4 proj = glm::ortho(-(WIDTH / 2.0f), WIDTH / 2.0f,
+                               -(HEIGHT / 2.0f),HEIGHT / 2.0f,
+                               -100.0f, 100.0f);
   glm::mat4 viewMatrix = view.getViewMatrix();
 
   glEnable(GL_DEPTH_TEST);
@@ -33,6 +35,7 @@ void Controller::mainLoop( void )
   {
 
     int ret = view.listenToCallbacks(window);
+    glm::vec2 dir = view.listenToMouseCallbacks(window);
 
     reactToCallback(ret);
 
@@ -46,12 +49,11 @@ void Controller::mainLoop( void )
     else
     {
       shader.use();
-      shader.setVec3("objectColor", 0.5f, 0.1f, 0.1f);
     }
     shader.setMat4("projection", proj);
     shader.setMat4("view", viewMatrix);
     shader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
-    shader.setVec3("lightPos",  0.0f, 0.0f ,5.0f);
+    shader.setVec3("lightPos",90.5f, 90.5f, 90.0f );
 
     model.draw(shader, lightingShader);
 
@@ -85,29 +87,11 @@ void Controller::reactToCallback(int ret)
     case SELECT_OBJECT_4:
         model.select(4);
         break;
-    case TRANSLATE_OBJECT_UP:
-        model.translate(UP);
-        break;
-    case TRANSLATE_OBJECT_LEFT:
-        model.translate(LEFT);
-        break;
-    case TRANSLATE_OBJECT_RIGHT:
-        model.translate(RIGHT);
-        break;
-    case TRANSLATE_OBJECT_DOWN:
-        model.translate(DOWN);
-        break;
     case SCALE_OBJECT_DOWN:
         model.scale(DOWN);
         break;
     case SCALE_OBJECT_UP:
         model.scale(UP);
-        break;
-    case ROTATE_OBJECT_ANTI_CLOCKWISE:
-        model.rotate(DOWN);
-        break;
-    case ROTATE_OBJECT_CLOCKWISE:
-        model.rotate(UP);
         break;
     case TOGGLE_SPLATS:
         model.renderSplats = !model.renderSplats;
@@ -124,6 +108,12 @@ void Controller::reactToCallback(int ret)
         break;
     case TOGGLE_NORMAL_COLORING:
         this->normalColoring = !this->normalColoring;
+        break;
+    case TRANSLATE_OBJECT:
+        model.translate(view.direction);
+        break;
+    case ROTATE_OBJECT:
+        model.rotate(view.trackball, view.direction);
         break;
   }
 }
