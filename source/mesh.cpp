@@ -152,7 +152,7 @@ void Mesh::rotate(glm::vec2 direction)
 
 void Mesh::translate(glm::vec2 direction)
 {
-  translationMatrix = glm::translate(translationMatrix, glm::vec3(0.7f * direction.x, direction.y, 0.0f));
+  translationMatrix = glm::translate(translationMatrix, glm::vec3(0.4f * direction.x, 0.6f*direction.y, 0.0f));
 }
 
 void Mesh::scale(int direction)
