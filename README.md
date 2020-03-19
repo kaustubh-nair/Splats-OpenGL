@@ -2,7 +2,7 @@
 
 Splats are incircles drawn inside triangles in wireframe meshes. This program demonstrates splat render given an input set of vertices and faces for the mesh. The radius of the circle can be modified using `j`/ `k` keys
 
-<div style="text-align:center"><img src="images/splats_normal_radius.png" /></div>
+<p align="center"><img src="images/splats_normal_radius.png" /></p>
 
 The program includes additional features such as:
 * Multiple objects
@@ -28,7 +28,7 @@ make run
 
 For key bindings, refer to `key_bindings.txt`
 
-# Screenshots
+## Screenshots
 
 
 ### Normal coloring
